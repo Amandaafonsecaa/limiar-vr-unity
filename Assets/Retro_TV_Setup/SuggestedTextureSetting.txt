@@ -1,0 +1,14 @@
+If your texture appears slightly blurry, follow these steps:
+
+For Unity:
+
+1. Select the texture in your project.
+2. In the Inspector tab, locate the Filter Mode setting.
+3. Change the Filter Mode to Point (no filter).
+
+For Unreal Engine:
+
+1. Open the texture in Unreal Engine.
+2. Go to the Details tab.
+3. Expand the Advanced section.
+4. Locate the Filter setting and change it to Nearest.
