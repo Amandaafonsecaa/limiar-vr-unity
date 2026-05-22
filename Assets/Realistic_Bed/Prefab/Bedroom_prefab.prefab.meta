@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 986bfd2cdf13b6a44b48955673d469f5
+timeCreated: 1517279580
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 107993
+  packageName: Realistic Bed 01
+  packageVersion: 1.0
+  assetPath: Assets/Realistic_Bed/Prefab/Bedroom_prefab.prefab
+  uploadId: 226971

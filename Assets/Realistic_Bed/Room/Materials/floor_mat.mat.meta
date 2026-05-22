@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 6b8cbd7495c24de45bbef44708d47eaf
+timeCreated: 1517281110
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 107993
+  packageName: Realistic Bed 01
+  packageVersion: 1.0
+  assetPath: Assets/Realistic_Bed/Room/Materials/floor_mat.mat
+  uploadId: 226971

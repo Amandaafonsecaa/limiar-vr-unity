@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c712c750d80899741b867586d621b540
+timeCreated: 1517279671
+licenseType: Store
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 107993
+  packageName: Realistic Bed 01
+  packageVersion: 1.0
+  assetPath: Assets/Realistic_Bed/Scene/Bedroom_demo.unity
+  uploadId: 226971

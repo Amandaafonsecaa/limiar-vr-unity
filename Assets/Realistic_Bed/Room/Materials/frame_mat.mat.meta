@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: cd71b9abc7a18b74bbdf1c6f0352d8d5
+timeCreated: 1517281540
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 107993
+  packageName: Realistic Bed 01
+  packageVersion: 1.0
+  assetPath: Assets/Realistic_Bed/Room/Materials/frame_mat.mat
+  uploadId: 226971

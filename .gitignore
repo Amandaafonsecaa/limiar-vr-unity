@@ -25,3 +25,7 @@ DerivedData/
 *.VC.db
 .DS_Store
 Thumbs.db
+# Large Unity demo/import files
+*.unitypackage
+Assets/Kimede/Time Ghost URP Conversion/
+Assets/Realistic_Bed/HDRI/
