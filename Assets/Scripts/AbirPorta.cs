@@ -8,6 +8,9 @@ public class AbirPorta : MonoBehaviour
     [SerializeField] private Vector3 openRotationOffset = new Vector3(0f, 0f, 90f);
     [SerializeField] private float duration = 0.5f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource openDoorAudio;
+
     [Header("State")]
     [SerializeField] private bool startsLocked = true;
 
@@ -21,11 +24,14 @@ public class AbirPorta : MonoBehaviour
         if (doorPivot == null)
             doorPivot = transform;
 
+        if (openDoorAudio == null)
+            openDoorAudio = GetComponent<AudioSource>();
+
         closedRotation = doorPivot.localEulerAngles;
         isLocked = startsLocked;
     }
 
-    public void ToggleDoor()
+    public void TryOpenDoor()
     {
         if (isLocked)
         {
@@ -33,10 +39,7 @@ public class AbirPorta : MonoBehaviour
             return;
         }
 
-        if (isOpen)
-            CloseDoor();
-        else
-            OpenDoor();
+        OpenDoor();
     }
 
     public void UnlockDoor()
@@ -52,6 +55,9 @@ public class AbirPorta : MonoBehaviour
 
         doorTween?.Kill();
 
+        if (openDoorAudio != null)
+            openDoorAudio.Play();
+
         Vector3 targetRotation = closedRotation + openRotationOffset;
 
         doorTween = doorPivot
@@ -59,20 +65,6 @@ public class AbirPorta : MonoBehaviour
             .SetEase(Ease.OutCubic);
 
         isOpen = true;
-    }
-
-    public void CloseDoor()
-    {
-        if (!isOpen)
-            return;
-
-        doorTween?.Kill();
-
-        doorTween = doorPivot
-            .DOLocalRotate(closedRotation, duration)
-            .SetEase(Ease.OutCubic);
-
-        isOpen = false;
     }
 
     public void UnlockAndOpenDoor()
