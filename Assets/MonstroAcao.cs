@@ -4,11 +4,12 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class MonstroPerseguidorQuarto : MonoBehaviour
 {
-    [Header("Alvo (Arraste o XROrigin ou Main Camera aqui)")]
+    [Header("Alvo (Arraste o XROrigin ou o objeto CameraOffset aqui)")]
     public Transform jogador;
 
     [Header("Configurações")]
-    public float distanciaParaAtacar = 1.8f; 
+    public float distanciaParaParar = 1.0f; 
+    public float velocidadeSemNavMesh = 2.5f; // Velocidade dele caso o NavMesh trave na porta
 
     [Header("Áudio de Perseguição")]
     public AudioSource audioFalasLongas; 
@@ -22,20 +23,10 @@ public class MonstroPerseguidorQuarto : MonoBehaviour
         agente = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-        if (jogador == null && Camera.main != null)
-        {
-            jogador = Camera.main.transform;
-        }
-
-        // O PULO DO GATO: Desliga a rotação automática do agente para não dar conflito com o LookAt
         if (agente != null)
         {
             agente.updateRotation = false;
-        }
-
-        if (animator != null)
-        {
-            animator.SetBool("isWalking", true);
+            agente.stoppingDistance = distanciaParaParar; 
         }
 
         if (audioFalasLongas != null && !jaComecouFalar)
@@ -51,30 +42,41 @@ public class MonstroPerseguidorQuarto : MonoBehaviour
         if (jogador == null) return;
 
         float distanciaAtual = Vector3.Distance(transform.position, jogador.position);
+        Debug.Log("Distância atual: " + distanciaAtual);
 
-        if (distanciaAtual <= distanciaParaAtacar)
+        if (distanciaAtual <= distanciaParaParar)
         {
-            agente.isStopped = true; 
+            if (agente != null && agente.isOnNavMesh) agente.isStopped = true; 
 
             if (animator != null)
             {
                 animator.SetBool("isWalking", false);
-                animator.SetBool("isAttacking", true); 
+                animator.SetBool("isAttacking", false); 
             }
         }
         else
         {
-            agente.isStopped = false;
-            agente.SetDestination(jogador.position); 
+            // O TRUQUE PARA ATRAVESSAR A PORTA SEM TRAVAR:
+            // Se o agente estiver ativo mas travado na porta (pathStatus parcial ou sem conseguir andar)
+            if (agente != null && agente.isOnNavMesh && (agente.pathStatus == NavMeshPathStatus.PathPartial || !agente.hasPath))
+            {
+                // Ele ignora o cálculo do NavMesh e caminha direto na sua direção usando o Transform!
+                transform.position = Vector3.MoveTowards(transform.position, jogador.position, velocidadeSemNavMesh * Time.deltaTime);
+            }
+            else if (agente != null && agente.isOnNavMesh)
+            {
+                // Se o caminho estiver livre, ele usa o NavMesh normal
+                agente.isStopped = false;
+                agente.SetDestination(jogador.position); 
+            }
 
             if (animator != null)
             {
-                animator.SetBool("isAttacking", false);
                 animator.SetBool("isWalking", true);
             }
         }
 
-        // Agora o LookAt roda livre sem travar as pernas do monstro!
+        // Mantém o seu código original de rotação idêntico
         Vector3 posicaoOlhar = new Vector3(jogador.position.x, transform.position.y, jogador.position.z);
         transform.LookAt(posicaoOlhar);
     }

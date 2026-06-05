@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class InterruptorSimples : MonoBehaviour
 {
-    // Removi os [Header] para evitar conflitos de atributos no Inspector
     public GameObject luzDoQuarto;    
     public GameObject fotoFlashback; 
     public GameObject volumeSonho; 
@@ -11,15 +10,25 @@ public class InterruptorSimples : MonoBehaviour
 
     private bool estaLigado = false;
 
+    void Start()
+    {
+        // GANTE O ESTADO INICIAL: Desliga tudo no primeiro frame do jogo
+        if(luzDoQuarto != null) luzDoQuarto.SetActive(false);
+        if(fotoFlashback != null) fotoFlashback.SetActive(false);
+        if(volumeSonho != null) volumeSonho.SetActive(false);
+        
+        if(particulasFlashback != null) particulasFlashback.Stop();
+        if(somAmbiente != null) somAmbiente.Stop();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        // VR Trigger
+        // Se a colisão estiver certa, isso vai disparar
         AlternarEstado();
     }
 
     private void OnMouseDown()
     {
-        // Mouse Test
         AlternarEstado();
     }
 
@@ -27,7 +36,6 @@ public class InterruptorSimples : MonoBehaviour
     {
         estaLigado = !estaLigado;
 
-        // Verifica cada objeto antes de mudar para evitar erros de 'Null Reference'
         if(luzDoQuarto != null) 
             luzDoQuarto.SetActive(estaLigado);
 

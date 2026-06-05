@@ -21,6 +21,8 @@ public class PanicoPersonagem : MonoBehaviour
     public float intensidadeLuzPanico = 1.2f;
 
     private AudioSource sZumbido, sCoracao, sRespiracao, sDublagem;
+    
+    // Variáveis internas para manipulação direta dos componentes do Volume
     private ChromaticAberration chromatic;
     private LensDistortion lens;
     private ColorAdjustments colorAdj;
@@ -30,18 +32,27 @@ public class PanicoPersonagem : MonoBehaviour
 
     void Start()
     {
-        // Pega os efeitos do Volume
-        volumePostProcess.profile.TryGet(out chromatic);
-        volumePostProcess.profile.TryGet(out lens);
-        volumePostProcess.profile.TryGet(out colorAdj);
-        volumePostProcess.profile.TryGet(out vignette);
+        // Força a busca direta no perfil do Volume atribuído
+        if (volumePostProcess != null && volumePostProcess.profile != null)
+        {
+            volumePostProcess.profile.TryGet(out chromatic);
+            volumePostProcess.profile.TryGet(out lens);
+            volumePostProcess.profile.TryGet(out colorAdj);
+            volumePostProcess.profile.TryGet(out vignette);
+            
+            // Alerta visual no Console para você ter certeza se ele achou os efeitos
+            Debug.Log($"[Volume] Chromatic: {chromatic != null} | Lens: {lens != null} | Color: {colorAdj != null} | Vignette: {vignette != null}");
+        }
+        else
+        {
+            Debug.LogError("🚨 [Volume] O componente Global Volume não foi arrastado para o Inspector!");
+        }
 
         ResetarEfeitos();
 
-        // Configura a luz inicial
         if (luzAura != null) luzAura.intensity = intensidadeLuzNormal;
 
-        // Cria os AudioSources
+        // Cria os AudioSources dinamicamente
         sZumbido = gameObject.AddComponent<AudioSource>();
         sCoracao = gameObject.AddComponent<AudioSource>();
         sRespiracao = gameObject.AddComponent<AudioSource>();
@@ -57,16 +68,15 @@ public class PanicoPersonagem : MonoBehaviour
 
     void Update()
     {
-        // Se o coração estiver batendo, faz a câmera balançar e a luz pulsar
-        if (sCoracao.isPlaying && sCoracao.volume > 0.1f)
+        if (sCoracao != null && sCoracao.isPlaying && sCoracao.volume > 0.1f)
         {
             tempoEfeito += Time.deltaTime;
 
-            // 1. Efeito de "Bêbada" (Balanço de Câmera)
+            // Balanço de Câmera (Efeito estonteante no VR)
             float balancoZ = Mathf.Sin(tempoEfeito * 1.5f) * 3.0f; 
             transform.localRotation = Quaternion.Euler(0, 0, balancoZ);
 
-            // 2. Luz Pulsante (Simula a pulsação sanguínea na vista)
+            // Luz Pulsante na visão do jogador
             if (luzAura != null)
             {
                 float pulso = Mathf.PingPong(tempoEfeito * 2f, 0.5f);
@@ -82,11 +92,11 @@ public class PanicoPersonagem : MonoBehaviour
         StartCoroutine(FadeSom(sZumbido, volumeMaximo, 1.5f)); 
         yield return new WaitForSeconds(1.5f);
 
-        // --- ETAPA 2: CORAÇÃO + EFEITOS VISUAIS ---
+        // --- ETAPA 2: CORAÇÃO + EFEITOS VISUAIS EM AÇÃO ---
         sCoracao.Play();
         StartCoroutine(FadeSom(sCoracao, volumeMaximo, 1.5f));
         
-        // Ativa os efeitos visuais (Cromática, Exposição para clarear, Vignette e Distorção)
+        // Ativa os efeitos visuais progressivamente em 3 segundos
         StartCoroutine(FadeVisual(1.0f, 1.5f, 0.45f, 3.0f)); 
 
         yield return new WaitForSeconds(1.5f);
@@ -106,14 +116,14 @@ public class PanicoPersonagem : MonoBehaviour
         }
 
         // --- ETAPA 5: FINALIZAÇÃO (FADE OUT TOTAL) ---
-        StartCoroutine(FadeVisual(0f, 0f, 0f, 3.0f)); // Volta a visão ao normal
+        StartCoroutine(FadeVisual(0f, 0f, 0f, 3.0f)); 
         StartCoroutine(FadeSom(sZumbido, 0, 3.0f));
         StartCoroutine(FadeSom(sCoracao, 0, 3.0f));
         StartCoroutine(FadeSom(sRespiracao, 0, 3.0f));
 
         yield return new WaitForSeconds(3.1f);
         
-        // Reset final de segurança
+        // Limpeza e estabilização do VR
         transform.localRotation = Quaternion.identity;
         if (luzAura != null) luzAura.intensity = intensidadeLuzNormal;
         PararTudo();
@@ -132,10 +142,10 @@ public class PanicoPersonagem : MonoBehaviour
             t += Time.deltaTime;
             float p = t / tempo;
 
-            if(chromatic) chromatic.intensity.value = Mathf.Lerp(cI, alvoCromatica, p);
-            if(colorAdj) colorAdj.postExposure.value = Mathf.Lerp(eI, alvoExp, p);
-            if(vignette) vignette.intensity.value = Mathf.Lerp(vI, alvoVignette, p);
-            if(lens) lens.intensity.value = Mathf.Lerp(lI, -0.35f * (alvoCromatica), p);
+            if (chromatic) chromatic.intensity.value = Mathf.Lerp(cI, alvoCromatica, p);
+            if (colorAdj) colorAdj.postExposure.value = Mathf.Lerp(eI, alvoExp, p);
+            if (vignette) vignette.intensity.value = Mathf.Lerp(vI, alvoVignette, p);
+            if (lens) lens.intensity.value = Mathf.Lerp(lI, -0.35f * (alvoCromatica), p);
 
             yield return null;
         }
@@ -156,12 +166,16 @@ public class PanicoPersonagem : MonoBehaviour
         s.clip = c; s.loop = l; s.spatialBlend = 0; s.playOnAwake = false; s.volume = 0;
     }
 
-    void PararTudo() { sZumbido.Stop(); sCoracao.Stop(); sRespiracao.Stop(); }
+    void PararTudo() { 
+        if (sZumbido != null) sZumbido.Stop(); 
+        if (sCoracao != null) sCoracao.Stop(); 
+        if (sRespiracao != null) sRespiracao.Stop(); 
+    }
 
     void ResetarEfeitos() {
-        if(chromatic) chromatic.intensity.value = 0;
-        if(colorAdj) colorAdj.postExposure.value = 0;
-        if(vignette) vignette.intensity.value = 0;
-        if(lens) lens.intensity.value = 0;
+        if (chromatic) chromatic.intensity.value = 0;
+        if (colorAdj) colorAdj.postExposure.value = 0;
+        if (vignette) vignette.intensity.value = 0;
+        if (lens) lens.intensity.value = 0;
     }
 }
