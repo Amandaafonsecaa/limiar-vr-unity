@@ -7389,6 +7389,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Anchor_House_Brush
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f0c5bfb867fb06a46a4bf497ad44c6cc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
