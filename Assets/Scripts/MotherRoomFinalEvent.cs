@@ -59,11 +59,7 @@ public class MotherRoomFinalEvent : MonoBehaviour
         if (presenceInMotherRoom != null)
             presenceInMotherRoom.SetActive(false);
 
-        if (playerRig != null && livingRoomReturnPoint != null)
-        {
-            playerRig.position = livingRoomReturnPoint.position;
-            playerRig.rotation = livingRoomReturnPoint.rotation;
-        }
+        TeleportPlayerToLivingRoom();
 
         if (finalPresenceInLivingRoom != null)
             finalPresenceInLivingRoom.SetActive(true);
@@ -74,6 +70,37 @@ public class MotherRoomFinalEvent : MonoBehaviour
         yield return Fade(0f);
 
         Debug.Log("Evento final do quarto da mãe concluído.");
+    }
+
+    private void TeleportPlayerToLivingRoom()
+    {
+        if (playerRig == null || livingRoomReturnPoint == null)
+        {
+            Debug.LogWarning("Player Rig ou Living Room Return Point não foram configurados.");
+            return;
+        }
+
+        CharacterController characterController = playerRig.GetComponent<CharacterController>();
+
+        if (characterController != null)
+            characterController.enabled = false;
+
+        Vector3 targetPosition = livingRoomReturnPoint.position;
+
+        Quaternion targetRotation = Quaternion.Euler(
+            0f,
+            livingRoomReturnPoint.eulerAngles.y,
+            0f
+        );
+
+        playerRig.SetPositionAndRotation(targetPosition, targetRotation);
+
+        Physics.SyncTransforms();
+
+        if (characterController != null)
+            characterController.enabled = true;
+
+        Debug.Log("Jogador teleportado para a sala final.");
     }
 
     private IEnumerator FlickerLights()

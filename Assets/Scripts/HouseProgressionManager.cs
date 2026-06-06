@@ -19,6 +19,11 @@ public class HouseProgressionManager : MonoBehaviour
 
     private bool notebookEventTriggered;
 
+    public bool HasCompletedRequiredMemories()
+    {
+        return brushMemoryDone && tvMemoryDone && sculpturesMemoryDone;
+    }
+
     public void MarkBrushMemoryDone()
     {
         brushMemoryDone = true;
@@ -34,27 +39,23 @@ public class HouseProgressionManager : MonoBehaviour
     public void MarkSculpturesMemoryDone()
     {
         sculpturesMemoryDone = true;
-        Debug.Log("Memória das esculturas concluída.");
+        Debug.Log("Memória da estante/livros concluída.");
     }
 
-    public void TryTriggerNotebookEvent()
+    public bool TryTriggerNotebookEvent()
     {
         if (notebookEventTriggered)
-            return;
+            return true;
 
-        if (!CanOpenMotherRoomDoor())
+        if (!HasCompletedRequiredMemories())
         {
             Debug.Log("Caderno encontrado, mas ainda faltam memórias antes da porta abrir.");
-            return;
+            return false;
         }
 
         notebookEventTriggered = true;
         StartCoroutine(NotebookEventSequence());
-    }
-
-    private bool CanOpenMotherRoomDoor()
-    {
-        return brushMemoryDone && tvMemoryDone && sculpturesMemoryDone;
+        return true;
     }
 
     private IEnumerator NotebookEventSequence()

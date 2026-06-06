@@ -1,10 +1,8 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-public class MedicineTouchTrigger : MonoBehaviour
+public class HouseEntryCaptionSequence : MonoBehaviour
 {
     [System.Serializable]
     public class CaptionLine
@@ -15,41 +13,26 @@ public class MedicineTouchTrigger : MonoBehaviour
         public float duration = 2.5f;
     }
 
-    [Header("XR Interaction")]
-    [SerializeField] private XRSimpleInteractable interactable;
-
-    [Header("Progression")]
-    [SerializeField] private MotherRoomProgressionManager progressionManager;
-
     [Header("Caption UI")]
     [SerializeField] private GameObject captionCanvas;
     [SerializeField] private CanvasGroup captionCanvasGroup;
     [SerializeField] private TMP_Text captionText;
 
     [Header("Caption Lines")]
-    [SerializeField] private CaptionLine[] captionLines;
+    [SerializeField] private CaptionLine[] lines;
 
     [Header("Timing")]
+    [SerializeField] private float delayBeforeStart = 0.5f;
     [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private float delayBetweenLines = 0.2f;
 
-    [Header("Optional Visual Feedback")]
-    [SerializeField] private Light highlightLight;
-    [SerializeField] private GameObject objectToEnableAfterTouch;
+    [Header("Detection")]
+    [SerializeField] private string playerTag = "Player";
 
-    private bool hasTriggered;
+    private bool hasPlayed;
 
     private void Awake()
     {
-        if (interactable == null)
-            interactable = GetComponent<XRSimpleInteractable>();
-
-        if (highlightLight != null)
-            highlightLight.enabled = false;
-
-        if (objectToEnableAfterTouch != null)
-            objectToEnableAfterTouch.SetActive(false);
-
         if (captionCanvas != null)
             captionCanvas.SetActive(false);
 
@@ -60,45 +43,36 @@ public class MedicineTouchTrigger : MonoBehaviour
             captionText.text = "";
     }
 
-    private void OnEnable()
+    private void OnTriggerEnter(Collider other)
     {
-        if (interactable != null)
-            interactable.selectEntered.AddListener(OnMedicineTouched);
-    }
-
-    private void OnDisable()
-    {
-        if (interactable != null)
-            interactable.selectEntered.RemoveListener(OnMedicineTouched);
-    }
-
-    private void OnMedicineTouched(SelectEnterEventArgs args)
-    {
-        if (hasTriggered)
+        if (hasPlayed)
             return;
 
-        hasTriggered = true;
-        StartCoroutine(PlayMedicineMemory());
+        bool isPlayer = other.CompareTag(playerTag) || other.transform.root.CompareTag(playerTag);
+
+        if (!isPlayer)
+            return;
+
+        hasPlayed = true;
+        StartCoroutine(PlayCaptions());
     }
 
-    private IEnumerator PlayMedicineMemory()
+    private IEnumerator PlayCaptions()
     {
-        if (highlightLight != null)
-            highlightLight.enabled = true;
-
-        if (objectToEnableAfterTouch != null)
-            objectToEnableAfterTouch.SetActive(true);
+        yield return new WaitForSeconds(delayBeforeStart);
 
         if (captionCanvas != null)
             captionCanvas.SetActive(true);
 
-        foreach (CaptionLine line in captionLines)
+        foreach (CaptionLine line in lines)
         {
             if (captionText != null)
                 captionText.text = line.text;
 
             yield return FadeCaption(1f);
+
             yield return new WaitForSeconds(line.duration);
+
             yield return FadeCaption(0f);
 
             if (captionText != null)
@@ -110,10 +84,7 @@ public class MedicineTouchTrigger : MonoBehaviour
         if (captionCanvas != null)
             captionCanvas.SetActive(false);
 
-        if (progressionManager != null)
-            progressionManager.MarkMedicineSeen();
-
-        Debug.Log("Remédios tocados. Memória dos remédios concluída.");
+        Debug.Log("Legendas da entrada da casa finalizadas.");
     }
 
     private IEnumerator FadeCaption(float targetAlpha)
