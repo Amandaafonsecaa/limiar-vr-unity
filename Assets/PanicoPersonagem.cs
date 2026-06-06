@@ -12,7 +12,10 @@ public class PanicoPersonagem : MonoBehaviour
 
     [Header("Sistema de Legenda VR")]
     public GameObject sistemaLegenda;
-    public float tempoExibicaoLegenda = 4.0f;
+    
+    // Injetamos a estrutura de texto diretamente aqui dentro
+    [Header("Roteiro de Legenda do Pânico")]
+    public SubtitleTrigger.LinhaLegenda[] linhasPanico;
 
     [Header("Referências de Sistema")]
     public Volume volumePostProcess;
@@ -24,7 +27,6 @@ public class PanicoPersonagem : MonoBehaviour
     public float intensidadeLuzPanico = 1.2f;
 
     private AudioSource sZumbido, sCoracao, sRespiracao;
-
     private ChromaticAberration chromatic;
     private LensDistortion lens;
     private ColorAdjustments colorAdj;
@@ -94,18 +96,30 @@ public class PanicoPersonagem : MonoBehaviour
         tempoEfeito = 0f;
         yield return new WaitForSeconds(1.0f);
 
-        // FASE 3 — Respiração (2x) + Sequência de legendas
+        // FASE 3 — Respiração (2x) + Envia a lista customizada de pânico
         StartCoroutine(TocarRespiracaoDoisLoops());
 
+        float tempoEsperaLegenda = 0f;
         if (sistemaLegenda != null)
         {
             LegendaVR scriptLegenda = sistemaLegenda.GetComponent<LegendaVR>();
             if (scriptLegenda != null)
-                scriptLegenda.MostrarSequencia();
+            {
+                // Envia as linhas criadas neste script
+                scriptLegenda.MostrarSequencia(linhasPanico);
+                
+                // Calcula automaticamente o tempo que as legendas vão durar
+                foreach (var linha in linhasPanico)
+                {
+                    tempoEsperaLegenda += linha.duracao + 0.2f; // Contando o delay
+                }
+            }
         }
 
-        // Espera o tempo total definido no Inspector
-        yield return new WaitForSeconds(tempoExibicaoLegenda);
+        // Se o cálculo falhar ou não tiver legenda, assume um padrão de 4s para segurança
+        if (tempoEsperaLegenda == 0f) tempoEsperaLegenda = 4.0f;
+
+        yield return new WaitForSeconds(tempoEsperaLegenda);
 
         // FASE 4 — Fade out de tudo
         if (sistemaLegenda != null)
@@ -190,4 +204,7 @@ public class PanicoPersonagem : MonoBehaviour
         if (vignette)  vignette.intensity.value    = 0;
         if (lens)      lens.intensity.value        = 0;
     }
+
+    // Mude para PUBLIC para o script da mesa conseguir dar o comando de parar!
+    
 }

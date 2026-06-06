@@ -4,29 +4,20 @@ using System.Collections;
 
 public class LegendaVR : MonoBehaviour
 {
-    [System.Serializable]
-    public class LinhaLegenda
-    {
-        [TextArea(2, 4)]
-        public string texto;
-        public float duracao = 2.5f;
-    }
-
     [Header("Referências UI")]
     [SerializeField] private CanvasGroup captionCanvasGroup;
     [SerializeField] private TMP_Text captionText;
-
-    [Header("Linhas de Legenda")]
-    public LinhaLegenda[] linhas;
 
     [Header("Posicionamento VR")]
     public Transform cameraJogador;
     public float distanciaDoRosto = 2.0f;
     public float alturaLegenda = -0.3f;
 
-    [Header("Timing")]
+    [Header("Timing Padrão")]
     [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private float delayEntreLinhas = 0.2f;
+
+    private Coroutine sequenciaAtiva;
 
     void Awake()
     {
@@ -43,30 +34,32 @@ public class LegendaVR : MonoBehaviour
     {
         if (cameraJogador == null) return;
 
-        // Posiciona exatamente na frente da câmera, centralizado
+        // Posição: Mantém um deslize suave e rápido (30f) para evitar enjoo de movimento (Motion Sickness)
         Vector3 posicaoAlvo = cameraJogador.position
                             + cameraJogador.forward * distanciaDoRosto
                             + Vector3.up * alturaLegenda;
 
-        transform.position = Vector3.Lerp(transform.position, posicaoAlvo, Time.deltaTime * 10f);
+        transform.position = Vector3.Lerp(transform.position, posicaoAlvo, Time.deltaTime * 30f);
 
-        // Fica paralelo ao rosto do jogador (não aponta para ele, fica de frente)
-        transform.rotation = Quaternion.Lerp(transform.rotation, cameraJogador.rotation, Time.deltaTime * 10f);
+        // Rotação: 100% travada com os olhos do jogador de forma instantânea
+        transform.rotation = cameraJogador.rotation;
     }
 
-    public void MostrarSequencia()
+    public void MostrarSequencia(SubtitleTrigger.LinhaLegenda[] novasLinhas)
     {
-        StartCoroutine(TocarSequencia());
+        if (sequenciaAtiva != null) StopCoroutine(sequenciaAtiva);
+        sequenciaAtiva = StartCoroutine(TocarSequencia(novasLinhas));
     }
 
     public void LimparLegenda()
     {
+        if (sequenciaAtiva != null) StopCoroutine(sequenciaAtiva);
         StartCoroutine(EsconderComFade());
     }
 
-    private IEnumerator TocarSequencia()
+    private IEnumerator TocarSequencia(SubtitleTrigger.LinhaLegenda[] linhasParaTocar)
     {
-        foreach (LinhaLegenda linha in linhas)
+        foreach (SubtitleTrigger.LinhaLegenda linha in linhasParaTocar)
         {
             if (captionText != null) captionText.text = linha.texto;
             yield return FadeAlpha(0f, 1f);
