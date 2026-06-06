@@ -7,7 +7,7 @@ MonoImporter:
   - clipeZumbido: {fileID: 8300000, guid: fd7fc50c8ba404e078c9124582592b6b, type: 3}
   - clipeCoracao: {fileID: 8300000, guid: 4261ad84a65ae47f790727602b97f00f, type: 3}
   - clipeRespiracao: {fileID: 8300000, guid: f074900c8eab346858f1de04f5124e14, type: 3}
-  - clipeDublagem: {instanceID: 0}
+  - clipeDublagem: {fileID: 8300000, guid: 74f80762e60dc470ba237775bdcbf005, type: 3}
   - volumePostProcess: {instanceID: 0}
   - luzAura: {instanceID: 0}
   executionOrder: 0

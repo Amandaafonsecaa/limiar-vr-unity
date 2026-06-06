@@ -1,105 +1,58 @@
 using UnityEngine;
-using DG.Tweening;
 
-public class AbirPorta : MonoBehaviour
+public class AbrirPorta : MonoBehaviour
 {
-    [Header("Door")]
-    [SerializeField] private Transform doorPivot;
-    [SerializeField] private Vector3 openRotationOffset = new Vector3(0f, 90f, 0f); // Ajustado para rotacionar no eixo Y comum de portas
-    [SerializeField] private float duration = 0.5f;
+    [Header("Configurações da Porta")]
+    [Tooltip("Arraste a própria porta para cá.")]
+    public Transform objetoPorta;
+    
+    [Tooltip("O ângulo que a porta vai girar quando abrir. Geralmente 90 no Y.")]
+    public Vector3 rotacaoBotaoAberto = new Vector3(0f, 90f, 0f);
 
-    [Header("Audio")]
-    [SerializeField] private AudioSource openDoorAudio;
-    [SerializeField] private AudioSource closeDoorAudio; // Novo campo para o som de fechar
+    [Header("Áudio")]
+    public AudioSource somPorta;
 
-    [Header("State")]
-    [SerializeField] private bool startsLocked = false; // Mudei para false para facilitar seus testes iniciais!
+    private Quaternion rotacaoFechada;
+    private Quaternion rstAlvo;
+    private bool abriu = false;
 
-    private Vector3 closedRotation;
-    private bool isOpen;
-    private bool isLocked;
-    private Tween doorTween;
-
-    private void Awake()
+    void Start()
     {
-        if (doorPivot == null)
-            doorPivot = transform;
+        // Salva a rotação inicial automática da porta
+        if (objetoPorta == null) objetoPorta = transform;
+        rotacaoFechada = objetoPorta.localRotation;
+        rstAlvo = rotacaoFechada;
 
-        if (openDoorAudio == null)
-            openDoorAudio = GetComponent<AudioSource>();
-
-        closedRotation = doorPivot.localEulerAngles;
-        isLocked = startsLocked;
+        if (somPorta != null) somPorta.playOnAwake = false;
     }
 
-    // Função inteligente: se estiver aberta, fecha. Se estiver fechada, tenta abrir.
-    public void InteragirComAPorta()
+    void Update()
     {
-        if (isOpen)
-        {
-            CloseDoor();
-        }
-        else
-        {
-            TryOpenDoor();
-        }
+        // Faz a porta girar suavemente frame a frame sem precisar de DOTween
+        objetoPorta.localRotation = Quaternion.Slerp(objetoPorta.localRotation, rstAlvo, Time.deltaTime * 5f);
     }
 
-    public void TryOpenDoor()
+    // Abre a porta quando o jogador entra na área
+    private void OnTriggerEnter(Collider other)
     {
-        if (isLocked)
-        {
-            Debug.Log("Porta da mãe está trancada.");
-            return;
-        }
+        if (abriu) return;
+        
+        rstAlvo = rotacaoFechada * Quaternion.Euler(rotacaoBotaoAberto);
+        abriu = true;
 
-        OpenDoor();
+        if (somPorta != null) somPorta.Play();
+        Debug.Log("Porta abriu por aproximação!");
     }
 
-    public void UnlockDoor()
+    // Fecha a porta quando o jogador sai da área
+    private void OnTriggerExit(Collider other)
     {
-        isLocked = false;
-        Debug.Log("Porta da mãe destrancada.");
-    }
+        if (!abriu) return;
 
-    public void OpenDoor()
-    {
-        if (isOpen) return;
+        rstAlvo = rotacaoFechada;
+        abriu = false;
 
-        doorTween?.Kill();
-
-        if (openDoorAudio != null)
-            openDoorAudio.Play();
-
-        Vector3 targetRotation = closedRotation + openRotationOffset;
-
-        doorTween = doorPivot
-            .DOLocalRotate(targetRotation, duration)
-            .SetEase(Ease.OutCubic);
-
-        isOpen = true;
-    }
-
-    // ✅ NOVA FUNÇÃO: Faz a porta voltar para a rotação original fechada
-    public void CloseDoor()
-    {
-        if (!isOpen) return;
-
-        doorTween?.Kill();
-
-        if (closeDoorAudio != null)
-            closeDoorAudio.Play();
-
-        doorTween = doorPivot
-            .DOLocalRotate(closedRotation, duration)
-            .SetEase(Ease.OutCubic);
-
-        isOpen = false;
-    }
-
-    public void UnlockAndOpenDoor()
-    {
-        UnlockDoor();
-        OpenDoor();
+        if (somPorta != null) somPorta.Play();
+        Debug.Log("Porta fechou quando o jogador se afastou!");
     }
 }
