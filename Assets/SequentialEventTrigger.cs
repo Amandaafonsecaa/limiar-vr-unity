@@ -78,17 +78,15 @@ public class SequentialEventTrigger : MonoBehaviour
         // ==========================================
         yield return new WaitForSeconds(delayAntesDoSusto);
 
-        // 1. Liga o coração de fundo IMEDIATAMENTE (Local e em loop)
         if (somFundoReacao != null)
         {
             audioSourceLocal.clip = somFundoReacao;
             audioSourceLocal.volume = 0f;
             audioSourceLocal.loop = true;
             audioSourceLocal.Play();
-            StartCoroutine(FadeVolume(audioSourceLocal, 0f, 0.8f, 0.2f)); // Fade in ultra rápido
+            StartCoroutine(FadeVolume(audioSourceLocal, 0f, 0.8f, 0.2f)); 
         }
 
-        // 2. Dispara o som do susto no mesmo instante
         AudioSource sourceSusto = (audioSourceSustoExterno != null) ? audioSourceSustoExterno : audioSourceLocal;
         
         if (somDoSustoBackup != null && audioSourceSustoExterno == null)
@@ -98,7 +96,6 @@ public class SequentialEventTrigger : MonoBehaviour
 
         if (sourceSusto != null && sourceSusto.clip != null)
         {
-            // Se o susto for local, usamos o PlayOneShot para não cortar o coração que acabou de dar Play
             if (sourceSusto == audioSourceLocal)
             {
                 audioSourceLocal.PlayOneShot(somDoSustoBackup);
@@ -109,11 +106,9 @@ public class SequentialEventTrigger : MonoBehaviour
                 sourceSusto.Play();
             }
 
-            // Espera o susto acontecer enquanto o coração já está bombando de fundo
             float tempoDeEsperaEfetivo = Mathf.Min(tempoMaximoSusto, sourceSusto.clip.length);
             yield return new WaitForSeconds(tempoDeEsperaEfetivo);
 
-            // Se for áudio externo, para ele com fade
             if (audioSourceSustoExterno != null)
             {
                 yield return StartCoroutine(FadeVolume(sourceSusto, sourceSusto.volume, 0f, 0.4f));
@@ -122,14 +117,32 @@ public class SequentialEventTrigger : MonoBehaviour
         }
 
         // ==========================================
-        // PASSO 3: Legendas de Reação aparecem (Coração continua tocando)
+        // PASSO 3: Legendas de Reação aparecem
         // ==========================================
         yield return new WaitForSeconds(delayAntesDasSegundasLinhas);
 
         if (segundasLinhas != null && segundasLinhas.Length > 0)
         {
             sistemaLegenda.MostrarSequencia(segundasLinhas);
+            
+            // Espera cronometrada para cada linha de reação terminar na tela
+            foreach (var linha in segundasLinhas)
+            {
+                yield return new WaitForSeconds(linha.duracao + 0.2f);
+            }
         }
+
+        // ==========================================
+        // FIM DA CENA: O respiro pós-legenda e o silêncio
+        // ==========================================
+        // Espera cravado 2.5 segundos com o coração ainda batendo no escuro
+        yield return new WaitForSeconds(2.5f);
+
+        // Faz o Fade Out suave de 1.0 segundo para o coração parar de vez sem estalos secos
+        yield return StartCoroutine(FadeVolume(audioSourceLocal, audioSourceLocal.volume, 0f, 1.0f));
+        audioSourceLocal.Stop();
+        
+        Debug.Log("[Gatilho Mesa] Sequência encerrada e coração limpo.");
     }
 
     private IEnumerator FadeVolume(AudioSource source, float volumeInicial, float volumeAlvo, float duracao)
