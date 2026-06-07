@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Video;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -11,7 +12,6 @@ public class BrushFlashbackTrigger : MonoBehaviour
     {
         [TextArea(2, 4)]
         public string text;
-
         public float duration = 2.5f;
     }
 
@@ -21,8 +21,13 @@ public class BrushFlashbackTrigger : MonoBehaviour
     [Header("Progression")]
     [SerializeField] private HouseProgressionManager progressionManager;
 
-    [Header("Flashback Objects Optional")]
-    [SerializeField] private GameObject flashbackRoot;
+    [Header("Video Cutscene")]
+    [SerializeField] private GameObject videoPanel;
+    [SerializeField] private VideoPlayer videoPlayer;
+    [SerializeField] private float fallbackVideoDuration = 8f;
+
+    [Header("Disable During Cutscene")]
+    [SerializeField] private GameObject[] objectsToDisableDuringCutscene;
 
     [Header("Caption UI")]
     [SerializeField] private GameObject captionCanvas;
@@ -33,7 +38,7 @@ public class BrushFlashbackTrigger : MonoBehaviour
     [SerializeField] private CaptionLine[] captionLines;
 
     [Header("Timing")]
-    [SerializeField] private float delayBeforeCaptions = 0.2f;
+    [SerializeField] private float delayBeforeCaptions = 0.3f;
     [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private float delayBetweenLines = 0.2f;
 
@@ -44,8 +49,16 @@ public class BrushFlashbackTrigger : MonoBehaviour
         if (grabInteractable == null)
             grabInteractable = GetComponent<XRGrabInteractable>();
 
-        if (flashbackRoot != null)
-            flashbackRoot.SetActive(false);
+        if (videoPanel != null)
+            videoPanel.SetActive(false);
+
+        if (videoPlayer != null)
+        {
+            videoPlayer.Stop();
+            videoPlayer.playOnAwake = false;
+            videoPlayer.isLooping = false;
+            videoPlayer.audioOutputMode = VideoAudioOutputMode.None;
+        }
 
         if (captionCanvas != null)
             captionCanvas.SetActive(false);
@@ -75,16 +88,67 @@ public class BrushFlashbackTrigger : MonoBehaviour
             return;
 
         hasPlayed = true;
-        StartCoroutine(PlayBrushMemory());
+        StartCoroutine(PlayBrushCutscene());
     }
 
-    private IEnumerator PlayBrushMemory()
+    private IEnumerator PlayBrushCutscene()
     {
-        if (flashbackRoot != null)
-            flashbackRoot.SetActive(true);
+        SetCutsceneObjects(false);
+
+        if (videoPanel != null)
+            videoPanel.SetActive(true);
+
+        if (videoPlayer != null)
+        {
+            videoPlayer.time = 0;
+            videoPlayer.Play();
+        }
 
         yield return new WaitForSeconds(delayBeforeCaptions);
 
+        Coroutine captionRoutine = StartCoroutine(PlayCaptions());
+
+        if (videoPlayer != null)
+        {
+            while (videoPlayer.isPlaying)
+                yield return null;
+        }
+        else
+        {
+            yield return new WaitForSeconds(fallbackVideoDuration);
+        }
+
+        if (captionRoutine != null)
+            yield return captionRoutine;
+
+        if (videoPlayer != null)
+            videoPlayer.Stop();
+
+        if (videoPanel != null)
+            videoPanel.SetActive(false);
+
+        SetCutsceneObjects(true);
+
+        if (progressionManager != null)
+            progressionManager.MarkBrushMemoryDone();
+
+        Debug.Log("Cutscene da escova concluída.");
+    }
+
+    private void SetCutsceneObjects(bool active)
+    {
+        if (objectsToDisableDuringCutscene == null)
+            return;
+
+        foreach (GameObject obj in objectsToDisableDuringCutscene)
+        {
+            if (obj != null)
+                obj.SetActive(active);
+        }
+    }
+
+    private IEnumerator PlayCaptions()
+    {
         if (captionCanvas != null)
             captionCanvas.SetActive(true);
 
@@ -94,9 +158,7 @@ public class BrushFlashbackTrigger : MonoBehaviour
                 captionText.text = line.text;
 
             yield return FadeCaption(1f);
-
             yield return new WaitForSeconds(line.duration);
-
             yield return FadeCaption(0f);
 
             if (captionText != null)
@@ -107,14 +169,6 @@ public class BrushFlashbackTrigger : MonoBehaviour
 
         if (captionCanvas != null)
             captionCanvas.SetActive(false);
-
-        if (flashbackRoot != null)
-            flashbackRoot.SetActive(false);
-
-        if (progressionManager != null)
-            progressionManager.MarkBrushMemoryDone();
-
-        Debug.Log("Memória da escova concluída.");
     }
 
     private IEnumerator FadeCaption(float targetAlpha)
