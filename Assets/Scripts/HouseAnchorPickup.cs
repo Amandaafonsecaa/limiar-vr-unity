@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -12,33 +11,36 @@ public class HouseAnchorPickup : MonoBehaviour
     {
         [TextArea(2, 4)]
         public string text;
-
         public float duration = 2.5f;
     }
 
     [Header("XR Interaction")]
     [SerializeField] private XRSimpleInteractable interactable;
 
+    [Header("Progression")]
+    [SerializeField] private MotherRoomProgressionManager progressionManager;
+
     [Header("Visual")]
     [SerializeField] private GameObject visualRoot;
+    [SerializeField] private Light anchorLight;
 
     [Header("Caption UI")]
     [SerializeField] private GameObject captionCanvas;
     [SerializeField] private CanvasGroup captionCanvasGroup;
     [SerializeField] private TMP_Text captionText;
 
-    [Header("Caption Lines")]
-    [SerializeField] private CaptionLine[] captionLines;
+    [Header("Locked Caption Lines")]
+    [SerializeField] private CaptionLine[] lockedCaptionLines;
+
+    [Header("Collect Caption Lines")]
+    [SerializeField] private CaptionLine[] collectCaptionLines;
 
     [Header("Timing")]
     [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private float delayBetweenLines = 0.2f;
-    [SerializeField] private float delayBeforeDisappear = 0.3f;
 
-    [Header("Events")]
-    public UnityEvent onAnchorCollected;
-
-    private bool hasCollected;
+    private bool collected;
+    private bool captionPlaying;
 
     private void Awake()
     {
@@ -72,21 +74,51 @@ public class HouseAnchorPickup : MonoBehaviour
 
     private void OnAnchorSelected(SelectEnterEventArgs args)
     {
-        if (hasCollected)
+        if (collected || captionPlaying)
             return;
 
-        hasCollected = true;
+        if (progressionManager != null && !progressionManager.CanCollectAnchor())
+        {
+            StartCoroutine(PlayLockedSequence());
+            return;
+        }
+
+        collected = true;
         StartCoroutine(CollectAnchorSequence());
+    }
+
+    private IEnumerator PlayLockedSequence()
+    {
+        captionPlaying = true;
+
+        yield return PlayCaptions(lockedCaptionLines);
+
+        captionPlaying = false;
     }
 
     private IEnumerator CollectAnchorSequence()
     {
-        Debug.Log("Âncora da casa encontrada.");
+        captionPlaying = true;
 
+        Debug.Log("Âncora da casa coletada.");
+
+        yield return PlayCaptions(collectCaptionLines);
+
+        if (anchorLight != null)
+            anchorLight.enabled = false;
+
+        if (visualRoot != null)
+            visualRoot.SetActive(false);
+
+        Debug.Log("Fim da fase da casa por enquanto.");
+    }
+
+    private IEnumerator PlayCaptions(CaptionLine[] lines)
+    {
         if (captionCanvas != null)
             captionCanvas.SetActive(true);
 
-        foreach (CaptionLine line in captionLines)
+        foreach (CaptionLine line in lines)
         {
             if (captionText != null)
                 captionText.text = line.text;
@@ -103,15 +135,6 @@ public class HouseAnchorPickup : MonoBehaviour
 
         if (captionCanvas != null)
             captionCanvas.SetActive(false);
-
-        onAnchorCollected?.Invoke();
-
-        yield return new WaitForSeconds(delayBeforeDisappear);
-
-        if (visualRoot != null)
-            visualRoot.SetActive(false);
-
-        Debug.Log("Âncora da casa coletada.");
     }
 
     private IEnumerator FadeCaption(float targetAlpha)
