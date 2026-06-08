@@ -97,7 +97,7 @@ MonoBehaviour:
   m_MinSize: {x: 280, y: 276}
   m_MaxSize: {x: 4000, y: 4026}
   vertical: 0
-  controlID: 4090
+  controlID: 127
   draggingID: 0
 --- !u!114 &5
 MonoBehaviour:
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 112}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 2416
+  controlID: 16
   draggingID: 0
 --- !u!114 &9
 MonoBehaviour:
@@ -220,7 +220,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 112}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 2417
+  controlID: 17
   draggingID: 0
 --- !u!114 &10
 MonoBehaviour:
@@ -274,7 +274,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 56}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 2396
+  controlID: 55
   draggingID: 0
 --- !u!114 &12
 MonoBehaviour:
@@ -1111,6 +1111,20 @@ MonoBehaviour:
       layout: 4
       size: {x: 0, y: 0}
       sizeOverridden: 0
+    - dockPosition: 1
+      containerId: overlay-container--right
+      displayed: 0
+      id: XR Building Blocks
+      index: 12
+      contents: '{"m_Layout":4,"m_Collapsed":false,"m_Folded":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":0.0,"y":0.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":0,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      floating: 0
+      collapsed: 0
+      snapOffset: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 0}
+      snapCorner: 0
+      layout: 4
+      size: {x: 0, y: 0}
+      sizeOverridden: 0
     m_ContainerData:
     - containerId: overlay-toolbar__top
       scrollOffset: 0
@@ -1146,7 +1160,7 @@ MonoBehaviour:
   m_WindowGUID: 7368f7ca6c400497fabe1654aaa81b34
   m_Gizmos: 1
   m_OverrideSceneCullingMask: 6917529027641081856
-  m_SceneIsLit: 1
+  m_SceneIsLit: 0
   m_SceneLighting: 1
   m_2DMode: 0
   m_isRotationLocked: 0
@@ -1154,9 +1168,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 0, y: 0, z: 0}
+    m_Target: {x: -0.014853766, y: 1.0277346, z: -14.701529}
     speed: 2
-    m_Value: {x: 0, y: 1.924978, z: -4.6748266}
+    m_Value: {x: -0.014853766, y: 1.0277346, z: -14.701529}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1202,13 +1216,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
+    m_Target: {x: -0.042811703, y: 0.9529573, z: -0.1833315, w: -0.23873475}
     speed: 2
-    m_Value: {x: -0.022764122, y: 0.9753997, z: -0.18234396, w: -0.12177046}
+    m_Value: {x: -0.04279961, y: 0.9526881, z: -0.18327972, w: -0.23866732}
   m_Size:
-    m_Target: 10
+    m_Target: 1.4629596
     speed: 2
-    m_Value: 14.068394
+    m_Value: 1.4629596
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1390,7 +1404,7 @@ MonoBehaviour:
       m_LastClickedID:
         m_Data: 0
       m_ExpandedIDs:
-      - m_Data: -1294
+      - m_Data: -1296
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1475,19 +1489,25 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Animation/Flora
+  - Assets
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: /Users/amandafonseca/Limbo
+  m_LastProjectPath: /Users/amandafonseca/Unifor/semestre6/CG/LimiarVR
   m_LockTracker:
     m_IsLocked: 0
   m_LastLocalAssetsSearchArea: 1
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs:
-    - m_Data: 46292
+    - m_Data: 50678
     m_LastClickedID:
-      m_Data: 46292
-    m_ExpandedIDs: []
+      m_Data: 50678
+    m_ExpandedIDs:
+    - m_Data: 0
+    - m_Data: 50678
+    - m_Data: 50680
+    - m_Data: 50682
+    - m_Data: 50684
+    - m_Data: 50686
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1518,7 +1538,13 @@ MonoBehaviour:
     m_SelectedIDs: []
     m_LastClickedID:
       m_Data: 0
-    m_ExpandedIDs: []
+    m_ExpandedIDs:
+    - m_Data: 0
+    - m_Data: 50678
+    - m_Data: 50680
+    - m_Data: 50682
+    - m_Data: 50684
+    - m_Data: 50686
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1545,9 +1571,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs:
-    - m_Data: -30252
-    m_LastClickedInstanceID: -30252
+    m_SelectedInstanceIDs: []
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs:
     - m_Data: 57132
