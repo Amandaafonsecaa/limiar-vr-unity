@@ -2,14 +2,14 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class MonstroPerseguidorQuarto : MonoBehaviour
+public class MonstroAcao : MonoBehaviour
 {
     [Header("Alvo (Arraste o XROrigin ou o objeto CameraOffset aqui)")]
     public Transform jogador;
 
     [Header("Configurações")]
     public float distanciaParaParar = 1.0f; 
-    public float velocidadeSemNavMesh = 2.5f; // Velocidade dele caso o NavMesh trave na porta
+    public float velocidadeSemNavMesh = 2.5f; 
 
     [Header("Áudio de Perseguição")]
     public AudioSource audioFalasLongas; 
@@ -18,7 +18,8 @@ public class MonstroPerseguidorQuarto : MonoBehaviour
     private Animator animator;
     private bool jaComecouFalar = false;
 
-    void Start()
+    // 1. O Awake roda ANTES de tudo, garantindo que a Unity ache o NavMesh e o Animator
+    void Awake()
     {
         agente = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
@@ -28,7 +29,18 @@ public class MonstroPerseguidorQuarto : MonoBehaviour
             agente.updateRotation = false;
             agente.stoppingDistance = distanciaParaParar; 
         }
+    }
 
+    // 2. O OnEnable roda NO EXATO SEGUNDO em que o interruptor dá SetActive(true)
+    void OnEnable()
+    {
+        // Força o agente a se situar no mapa para não bugar
+        if (agente != null && agente.isOnNavMesh)
+        {
+            agente.isStopped = false;
+        }
+
+        // Liga o áudio no momento do susto
         if (audioFalasLongas != null && !jaComecouFalar)
         {
             audioFalasLongas.loop = true;
@@ -56,16 +68,13 @@ public class MonstroPerseguidorQuarto : MonoBehaviour
         }
         else
         {
-            // O TRUQUE PARA ATRAVESSAR A PORTA SEM TRAVAR:
-            // Se o agente estiver ativo mas travado na porta (pathStatus parcial ou sem conseguir andar)
-            if (agente != null && agente.isOnNavMesh && (agente.pathStatus == NavMeshPathStatus.PathPartial || !agente.hasPath))
+            // Se o agente sumir do NavMesh por um frame ao spawnar, o MoveTowards força ele a andar
+            if (agente == null || !agente.isOnNavMesh || agente.pathStatus == NavMeshPathStatus.PathPartial || !agente.hasPath)
             {
-                // Ele ignora o cálculo do NavMesh e caminha direto na sua direção usando o Transform!
                 transform.position = Vector3.MoveTowards(transform.position, jogador.position, velocidadeSemNavMesh * Time.deltaTime);
             }
-            else if (agente != null && agente.isOnNavMesh)
+            else
             {
-                // Se o caminho estiver livre, ele usa o NavMesh normal
                 agente.isStopped = false;
                 agente.SetDestination(jogador.position); 
             }
@@ -76,7 +85,6 @@ public class MonstroPerseguidorQuarto : MonoBehaviour
             }
         }
 
-        // Mantém o seu código original de rotação idêntico
         Vector3 posicaoOlhar = new Vector3(jogador.position.x, transform.position.y, jogador.position.z);
         transform.LookAt(posicaoOlhar);
     }

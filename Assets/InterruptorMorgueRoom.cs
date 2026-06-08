@@ -2,66 +2,66 @@ using UnityEngine;
 
 public class InterruptorMorgueRoom : MonoBehaviour
 {
+    [Header("Iluminação Geral")]
     public GameObject luzDoQuarto;    
-    public GameObject fotoFlashback; 
-    public GameObject volumeSonho; 
-    public AudioSource somAmbiente;  
 
-    [Header("Configuração do Monstro")]
-    public GameObject monstroPerseguidor; // Arraste o monstro do quarto aqui
+    [Header("Configuração do Monstro e Susto")]
+    public GameObject monstroPerseguidor; 
+    public AudioSource somDoMonstro;  
 
-    private bool estaLigado = false;
+    private bool jaAtivou = false;
 
     void Start()
     {
-        // SEGURANÇA ABSOLUTA: Força o monstro a sumir e não existir no mapa no início do jogo
+        // Garante que o monstro comece totalmente sumido do mapa
         if (monstroPerseguidor != null)
             monstroPerseguidor.SetActive(false);
 
-        // Garante que os outros elementos visuais e sonoros também comecem desligados
-        if (luzDoQuarto != null) luzDoQuarto.SetActive(false);
-        if (fotoFlashback != null) fotoFlashback.SetActive(false);
-        if (volumeSonho != null) volumeSonho.SetActive(false);
-        if (somAmbiente != null) somAmbiente.Stop();
+        // Garante que a luz comece apagada
+        if (luzDoQuarto != null) 
+            luzDoQuarto.SetActive(false);
+
+        // Garante que o som do monstro não toque sozinho no início
+        if (somDoMonstro != null) 
+            somDoMonstro.playOnAwake = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        AlternarEstado();
+        // Verifica se quem entrou na área foi o jogador VR
+        if (other.CompareTag("Player") || other.GetComponent<Camera>() != null || other.name.Contains("Origin"))
+        {
+            AtivarSustoMorgue();
+        }
     }
 
     private void OnMouseDown()
     {
-        AlternarEstado();
+        AtivarSustoMorgue();
     }
 
-    void AlternarEstado()
+    void AtivarSustoMorgue()
     {
-        estaLigado = !estaLigado;
+        // Se já ativou uma vez, ignora para a luz continuar ligada direto
+        if (jaAtivou) return;
+        jaAtivou = true;
 
-        // Ativa ou desativa a luz do quarto
-        if(luzDoQuarto != null) 
-            luzDoQuarto.SetActive(estaLigado);
+        Debug.Log("[Morgue] Interruptor acionado! Invocando o monstro.");
 
-        // O monstro é invocado apenas quando a luz liga. Depois disso, ele não some mais.
-        if (estaLigado && monstroPerseguidor != null)
+        // 1. Liga a luz geral do quarto e ela NÃO desliga mais
+        if (luzDoQuarto != null) 
+            luzDoQuarto.SetActive(true);
+
+        // 2. Faz o monstro surgir instantaneamente na cena
+        if (monstroPerseguidor != null)
         {
             monstroPerseguidor.SetActive(true);
         }
 
-        if(fotoFlashback != null) 
-            fotoFlashback.SetActive(estaLigado);
-
-        if(volumeSonho != null) 
-            volumeSonho.SetActive(estaLigado);
-
-        // Toca o som do flashback (som ambiente configurado)
-        if(somAmbiente != null)
+        // 3. Toca o áudio de terror/grito do monstro
+        if (somDoMonstro != null)
         {
-            if (estaLigado)
-                somAmbiente.Play(); 
-            else
-                somAmbiente.Stop(); 
+            somDoMonstro.Play(); 
         }
     }
 }
