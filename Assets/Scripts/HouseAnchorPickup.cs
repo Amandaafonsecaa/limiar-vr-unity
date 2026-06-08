@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -35,6 +36,13 @@ public class HouseAnchorPickup : MonoBehaviour
     [Header("Collect Caption Lines")]
     [SerializeField] private CaptionLine[] collectCaptionLines;
 
+    [Header("Fade To Hub")]
+    [SerializeField] private CanvasGroup fadeCanvasGroup;
+    [SerializeField] private float fadeToBlackDuration = 1.5f;
+    [SerializeField] private float delayBeforeSceneLoad = 0.8f;
+    [SerializeField] private bool loadHubAfterCollect = false;
+    [SerializeField] private string hubSceneName = "Hub";
+
     [Header("Timing")]
     [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private float delayBetweenLines = 0.2f;
@@ -58,6 +66,12 @@ public class HouseAnchorPickup : MonoBehaviour
 
         if (captionText != null)
             captionText.text = "";
+
+        if (fadeCanvasGroup != null)
+        {
+            fadeCanvasGroup.alpha = 0f;
+            fadeCanvasGroup.gameObject.SetActive(false);
+        }
     }
 
     private void OnEnable()
@@ -90,9 +104,7 @@ public class HouseAnchorPickup : MonoBehaviour
     private IEnumerator PlayLockedSequence()
     {
         captionPlaying = true;
-
         yield return PlayCaptions(lockedCaptionLines);
-
         captionPlaying = false;
     }
 
@@ -110,7 +122,20 @@ public class HouseAnchorPickup : MonoBehaviour
         if (visualRoot != null)
             visualRoot.SetActive(false);
 
-        Debug.Log("Fim da fase da casa por enquanto.");
+        Debug.Log("Fim da fase da casa. Iniciando fade para preto.");
+
+        yield return FadeToBlack();
+
+        yield return new WaitForSeconds(delayBeforeSceneLoad);
+
+        if (loadHubAfterCollect)
+        {
+            SceneManager.LoadScene(hubSceneName);
+        }
+        else
+        {
+            Debug.Log("Hub ainda não carregado. Fase da casa concluída por enquanto.");
+        }
     }
 
     private IEnumerator PlayCaptions(CaptionLine[] lines)
@@ -153,5 +178,28 @@ public class HouseAnchorPickup : MonoBehaviour
         }
 
         captionCanvasGroup.alpha = targetAlpha;
+    }
+
+    private IEnumerator FadeToBlack()
+    {
+        if (fadeCanvasGroup == null)
+        {
+            Debug.LogWarning("Fade Canvas Group não conectado. Sem fade para preto.");
+            yield break;
+        }
+
+        fadeCanvasGroup.gameObject.SetActive(true);
+        fadeCanvasGroup.alpha = 0f;
+
+        float elapsed = 0f;
+
+        while (elapsed < fadeToBlackDuration)
+        {
+            elapsed += Time.deltaTime;
+            fadeCanvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeToBlackDuration);
+            yield return null;
+        }
+
+        fadeCanvasGroup.alpha = 1f;
     }
 }
