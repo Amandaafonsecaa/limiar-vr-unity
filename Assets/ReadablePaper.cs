@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Interactables; // Namespace obrigatório na Unity 6
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class ReadablePaper : MonoBehaviour
 {
     [Header("XR Interaction")]
-    [SerializeField] private XRSimpleInteractable interactable; // Tipo direto e seguro para Unity 6
+    [SerializeField] private XRSimpleInteractable interactable;
 
-    [Header("Read View")]
+    [Header("Document View")]
     [SerializeField] private GameObject documentCanvas;
 
-    private bool isOpen = false;
+    private bool isOpen;
 
     private void Awake()
     {
@@ -24,34 +24,22 @@ public class ReadablePaper : MonoBehaviour
     private void OnEnable()
     {
         if (interactable != null)
-        {
-            // Na Unity 6, o evento de ativação por raio usa selectEntered ou activated dependendo do Profile.
-            // Vamos escutar o 'activated' que é o gatilho padrão do simulador.
-            interactable.activated.AddListener(OnPaperActivated);
-        }
+            interactable.selectEntered.AddListener(OnDocumentSelected);
     }
 
     private void OnDisable()
     {
         if (interactable != null)
-        {
-            interactable.activated.RemoveListener(OnPaperActivated);
-        }
+            interactable.selectEntered.RemoveListener(OnDocumentSelected);
     }
 
-    private void OnPaperActivated(ActivateEventArgs args)
-    {
-        ToggleDocument();
-    }
-
-    public void ToggleDocument()
+    private void OnDocumentSelected(SelectEnterEventArgs args)
     {
         isOpen = !isOpen;
 
         if (documentCanvas != null)
-        {
             documentCanvas.SetActive(isOpen);
-            Debug.Log("Estado do papel alterado para: " + isOpen);
-        }
+
+        Debug.Log(isOpen ? "Registro de visitas aberto." : "Registro de visitas fechado.");
     }
 }
