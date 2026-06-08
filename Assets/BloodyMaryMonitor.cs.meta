@@ -1,2 +1,14 @@
 fileFormatVersion: 2
 guid: 61a878b781c4d4cb48752dc18af398df
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - screenUI: {instanceID: 0}
+  - puzzlePanel: {instanceID: 0}
+  - terminalText: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

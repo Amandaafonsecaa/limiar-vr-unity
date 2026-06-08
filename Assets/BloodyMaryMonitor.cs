@@ -1,46 +1,29 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class BloodyMaryMonitor : MonoBehaviour
 {
     public GameObject screenUI;
     public TextMeshProUGUI terminalText;
-    public AudioSource whisper;
 
+    private CanvasGroup puzzlePanel;
     private bool activated = false;
-    private float lookTimer = 0f;
 
-    void Update()
+    public AudioSource whisperAudio;
+    public GameObject blackLiquid;
+
+    void Start()
     {
-        if (!activated) return;
+        GameObject obj = GameObject.Find("PuzzlePanel");
 
-        Transform cam = Camera.main.transform;
-
-        Vector3 dir =
-            (transform.position - cam.position).normalized;
-
-        float dot =
-            Vector3.Dot(cam.forward, dir);
-
-        bool looking = dot > 0.95f;
-
-        if (looking)
+        if (obj != null)
         {
-            lookTimer += Time.deltaTime;
+            puzzlePanel = obj.GetComponent<CanvasGroup>();
 
-            if (lookTimer >= 3f)
-            {
-                whisper.Play();
-
-                terminalText.text +=
-                    "\n\n\"Diga o nome dela\"";
-
-                enabled = false;
-            }
-        }
-        else
-        {
-            lookTimer = 0f;
+            puzzlePanel.alpha = 0;
+            puzzlePanel.interactable = false;
+            puzzlePanel.blocksRaycasts = false;
         }
     }
 
@@ -52,9 +35,47 @@ public class BloodyMaryMonitor : MonoBehaviour
 
         screenUI.SetActive(true);
 
-        terminalText.text =
-            "A tela oscila com linhas de interferência.\n\n" +
-            "> EXECUTAR: bloody_mary.exe\n" +
-            "> STATUS: AGUARDANDO REFLEXO...";
+        StartCoroutine(StartSequence());
     }
+
+    IEnumerator StartSequence()
+    {
+        terminalText.text = "> EXECUTAR: bloody_mary.exe";
+
+        yield return new WaitForSeconds(2f);
+
+        terminalText.text += "\n> STATUS: AGUARDANDO REFLEXO...";
+
+        yield return new WaitForSeconds(3f);
+
+        puzzlePanel.alpha = 1;
+        puzzlePanel.interactable = true;
+        puzzlePanel.blocksRaycasts = true;
+    }
+    public void ShowPuzzleCompleted()
+{
+    screenUI.SetActive(true);
+
+    terminalText.text =
+        "> EXECUTAR: bloody_mary.exe\n" +
+        "> STATUS: AGUARDANDO REFLEXO...\n\n" +
+        "> PUZZLE CONCLUÍDO";
+}
+    public void StartFinalSequence()
+{
+    StartCoroutine(FinalSequence());
+}
+
+IEnumerator FinalSequence()
+{
+    ShowPuzzleCompleted();
+
+    yield return new WaitForSeconds(1f);
+
+    whisperAudio.Play();
+
+    yield return new WaitForSeconds(2f);
+
+    blackLiquid.SetActive(true);
+}
 }

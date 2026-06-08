@@ -4,29 +4,28 @@ public class DoorController : MonoBehaviour
 {
     private Animator animator;
 
-    void Start()
+    void Awake()
     {
-        // Pega o componente Animator no DoorPivot
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
+
+        Debug.Log("AWAKE -> " + gameObject.name);
+
+        if (animator != null)
+            Debug.Log("Animator encontrado em: " + animator.gameObject.name);
+        else
+            Debug.LogError("Animator não encontrado!");
     }
 
-    // Quando algo ENTRAR na área verde (Trigger)
-    void OnTriggerEnter(Collider other)
+    public void OpenDoor()
     {
-        // Verifica se quem entrou tem a etiqueta "Player" (Jogador)
-        if (other.CompareTag("Player"))
-        {
-            animator.SetBool("isOpen", true); // Abre a porta
-        }
-    }
+        Debug.Log("OPEN DOOR -> " + gameObject.name);
 
-    // Quando algo SAIR da área verde (Trigger)
-    void OnTriggerExit(Collider other)
-    {
-        // Verifica se quem saiu foi o jogador
-        if (other.CompareTag("Player"))
+        if (animator == null)
         {
-            animator.SetBool("isOpen", false); // Fecha a porta
+            Debug.LogError("Animator é NULL!");
+            return;
         }
+
+        animator.SetBool("isOpen", true);
     }
 }
