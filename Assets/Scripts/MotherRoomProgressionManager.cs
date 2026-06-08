@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MotherRoomProgressionManager : MonoBehaviour
 {
-    [Header("Required Objects")]
+    [Header("Progression")]
     [SerializeField] private bool prescriptionRead;
     [SerializeField] private bool medicineSeen;
 
@@ -13,35 +13,55 @@ public class MotherRoomProgressionManager : MonoBehaviour
 
     public void MarkPrescriptionRead()
     {
+        if (prescriptionRead)
+            return;
+
         prescriptionRead = true;
-        Debug.Log("Receita/atestado lido.");
+        Debug.Log("Atestado/receita lido.");
+
         CheckCompletion();
     }
 
     public void MarkMedicineSeen()
     {
+        if (medicineSeen)
+            return;
+
         medicineSeen = true;
         Debug.Log("Remédios vistos.");
+
         CheckCompletion();
     }
 
     private void CheckCompletion()
     {
+        Debug.Log("Checando conclusão do quarto da mãe.");
+
         if (finalEventTriggered)
             return;
 
-        if (prescriptionRead && medicineSeen)
+        if (!prescriptionRead || !medicineSeen)
+            return;
+
+        finalEventTriggered = true;
+
+        if (finalEvent != null)
         {
-            finalEventTriggered = true;
-            TriggerFinalEvent();
+            finalEvent.PlayEvent();
+            Debug.Log("Evento final do quarto da mãe chamado.");
+        }
+        else
+        {
+            Debug.LogWarning("Final Event não está conectado.");
         }
     }
 
-    private void TriggerFinalEvent()
+    [ContextMenu("Test Final Event")]
+    private void TestFinalEvent()
     {
-        Debug.Log("Receita e remédios encontrados. Evento final do quarto ativado.");
+        prescriptionRead = true;
+        medicineSeen = true;
 
-        if (finalEvent != null)
-            finalEvent.PlayEvent();
+        CheckCompletion();
     }
 }

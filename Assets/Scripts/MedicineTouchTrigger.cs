@@ -11,7 +11,6 @@ public class MedicineTouchTrigger : MonoBehaviour
     {
         [TextArea(2, 4)]
         public string text;
-
         public float duration = 2.5f;
     }
 
@@ -33,22 +32,12 @@ public class MedicineTouchTrigger : MonoBehaviour
     [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private float delayBetweenLines = 0.2f;
 
-    [Header("Optional Visual Feedback")]
-    [SerializeField] private Light highlightLight;
-    [SerializeField] private GameObject objectToEnableAfterTouch;
-
     private bool hasTriggered;
 
     private void Awake()
     {
         if (interactable == null)
             interactable = GetComponent<XRSimpleInteractable>();
-
-        if (highlightLight != null)
-            highlightLight.enabled = false;
-
-        if (objectToEnableAfterTouch != null)
-            objectToEnableAfterTouch.SetActive(false);
 
         if (captionCanvas != null)
             captionCanvas.SetActive(false);
@@ -63,32 +52,26 @@ public class MedicineTouchTrigger : MonoBehaviour
     private void OnEnable()
     {
         if (interactable != null)
-            interactable.selectEntered.AddListener(OnMedicineTouched);
+            interactable.selectEntered.AddListener(OnMedicineSelected);
     }
 
     private void OnDisable()
     {
         if (interactable != null)
-            interactable.selectEntered.RemoveListener(OnMedicineTouched);
+            interactable.selectEntered.RemoveListener(OnMedicineSelected);
     }
 
-    private void OnMedicineTouched(SelectEnterEventArgs args)
+    private void OnMedicineSelected(SelectEnterEventArgs args)
     {
         if (hasTriggered)
             return;
 
         hasTriggered = true;
-        StartCoroutine(PlayMedicineMemory());
+        StartCoroutine(PlayMedicineSequence());
     }
 
-    private IEnumerator PlayMedicineMemory()
+    private IEnumerator PlayMedicineSequence()
     {
-        if (highlightLight != null)
-            highlightLight.enabled = true;
-
-        if (objectToEnableAfterTouch != null)
-            objectToEnableAfterTouch.SetActive(true);
-
         if (captionCanvas != null)
             captionCanvas.SetActive(true);
 
@@ -110,10 +93,12 @@ public class MedicineTouchTrigger : MonoBehaviour
         if (captionCanvas != null)
             captionCanvas.SetActive(false);
 
+        // IMPORTANTE:
+        // Só marca os remédios como vistos depois que TODAS as legendas terminarem.
         if (progressionManager != null)
             progressionManager.MarkMedicineSeen();
 
-        Debug.Log("Remédios tocados. Memória dos remédios concluída.");
+        Debug.Log("Legenda dos remédios terminou. Remédios marcados como vistos.");
     }
 
     private IEnumerator FadeCaption(float targetAlpha)

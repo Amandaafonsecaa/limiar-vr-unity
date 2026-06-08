@@ -8,14 +8,22 @@ public class MotherRoomFinalEvent : MonoBehaviour
     [SerializeField] private float flickerDuration = 3f;
     [SerializeField] private float minIntensity = 0.05f;
     [SerializeField] private float maxIntensity = 2f;
+    [SerializeField] private float finalRoomIntensity = 0.03f;
 
-    [Header("Anchor")]
+    [Header("Anchor Reveal")]
     [SerializeField] private GameObject houseAnchorObject;
-
-    [Header("Timing")]
-    [SerializeField] private float delayBeforeAnchor = 1.5f;
+    [SerializeField] private Light anchorLight;
 
     private bool hasPlayed;
+
+    private void Awake()
+    {
+        if (houseAnchorObject != null)
+            houseAnchorObject.SetActive(false);
+
+        if (anchorLight != null)
+            anchorLight.enabled = false;
+    }
 
     public void PlayEvent()
     {
@@ -28,19 +36,16 @@ public class MotherRoomFinalEvent : MonoBehaviour
 
     private IEnumerator PlayFinalEvent()
     {
-        Debug.Log("Evento final simples do quarto da mãe iniciado.");
-
-        if (houseAnchorObject != null)
-            houseAnchorObject.SetActive(false);
+        Debug.Log("Evento final do quarto da mãe iniciado.");
 
         yield return FlickerLight();
 
-        yield return new WaitForSeconds(delayBeforeAnchor);
+        if (roomLight != null)
+            roomLight.intensity = finalRoomIntensity;
 
-        if (houseAnchorObject != null)
-            houseAnchorObject.SetActive(true);
+        RevealAnchor();
 
-        Debug.Log("Âncora da casa ativada.");
+        Debug.Log("Quarto escuro. Âncora e luz da âncora ativadas.");
     }
 
     private IEnumerator FlickerLight()
@@ -51,16 +56,24 @@ public class MotherRoomFinalEvent : MonoBehaviour
             yield break;
         }
 
-        float originalIntensity = roomLight.intensity;
         float elapsed = 0f;
 
         while (elapsed < flickerDuration)
         {
             elapsed += Time.deltaTime;
+
             roomLight.intensity = Random.Range(minIntensity, maxIntensity);
+
             yield return new WaitForSeconds(0.08f);
         }
+    }
 
-        roomLight.intensity = originalIntensity;
+    private void RevealAnchor()
+    {
+        if (houseAnchorObject != null)
+            houseAnchorObject.SetActive(true);
+
+        if (anchorLight != null)
+            anchorLight.enabled = true;
     }
 }
