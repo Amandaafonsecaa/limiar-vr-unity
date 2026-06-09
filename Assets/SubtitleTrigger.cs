@@ -1,54 +1,51 @@
 using UnityEngine;
-using System.Collections;
 
 public class SubtitleTrigger : MonoBehaviour
 {
+    // A estrutura foi mantida pública aqui para servir de modelo global para os outros scripts
     [System.Serializable]
     public class LinhaLegenda
     {
         [TextArea(2, 4)]
         public string texto;
-        public float duracao = 3f;
+        public float duracao = 2.5f;
     }
 
-    public LegendaVR legendaVR;
-    public LinhaLegenda[] falas;
+    [Header("Configuração da Legenda")]
+    [SerializeField] private LegendaVR sistemaLegenda; 
+    [SerializeField] private bool dispararApenasUmaVez = true;
 
-    public bool tocarAoIniciar = false;
-    public bool tocarUmaVez = true;
+    [Header("Linhas de Legenda Deste Gatilho")]
+    public LinhaLegenda[] linhas;
 
-    public AudioSource musicaDepois;
+    private bool jaDisparou = false;
 
-    private bool jaTocou = false;
-
-    void Start()
+    private void OnTriggerEnter(Collider other)
     {
-        if (tocarAoIniciar)
-            TocarLegenda();
+        if (other.CompareTag("Player") || other.GetComponent<Camera>() != null || other.name.Contains("Origin"))
+        {
+            if (jaDisparou && dispararApenasUmaVez) return;
+
+            if (sistemaLegenda != null && linhas != null && linhas.Length > 0)
+            {
+                jaDisparou = true;
+                
+                // Passa as falas exclusivas deste gatilho de proximidade para o tocador
+                sistemaLegenda.MostrarSequencia(linhas); 
+                
+                Debug.Log($"[Gatilho] {gameObject.name} enviou {linhas.Length} linhas de legenda.");
+            }
+        }
     }
 
-    public void TocarLegenda()
+    private void OnDrawGizmos()
     {
-        if (tocarUmaVez && jaTocou) return;
-
-        jaTocou = true;
-
-        StartCoroutine(TocarSequencia());
-    }
-
-    IEnumerator TocarSequencia()
-    {
-        if (legendaVR != null)
-            legendaVR.MostrarSequencia(falas);
-
-        float tempoTotal = 0f;
-
-        foreach (LinhaLegenda linha in falas)
-            tempoTotal += linha.duracao + 0.2f;
-
-        yield return new WaitForSeconds(tempoTotal);
-
-        if (musicaDepois != null)
-            musicaDepois.Play();
+        BoxCollider box = GetComponent<BoxCollider>();
+        if (box != null)
+        {
+            Gizmos.color = new Color(0f, 1f, 0f, 0.3f);
+            Gizmos.matrix = transform.localToWorldMatrix;
+            Gizmos.DrawCube(box.center, box.size);
+        }
     }
 }

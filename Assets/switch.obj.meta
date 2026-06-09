@@ -1,29 +1,9 @@
 fileFormatVersion: 2
-guid: 135d73731fd7241478ac0ef32683ee25
+guid: 357ab2a37ebe242e7ae65e666e26ce95
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: screw1_default3Mat
-    second: {fileID: 2100000, guid: e068bcf9a55b74c0283fc483e2488b12, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: screw2_default2Mat
-    second: {fileID: 2100000, guid: dbd0a3f0e541042a59ac1370cf7cf8a3, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: switchbase_default4Mat
-    second: {fileID: 2100000, guid: 3d260d32ba9f741908e752df808740b6, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: switchbutton_defaultMat
-    second: {fileID: 2100000, guid: 99a557d676146441fa7cbf193c76ab81, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
