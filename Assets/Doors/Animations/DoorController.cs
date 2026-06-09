@@ -2,24 +2,19 @@ using UnityEngine;
 
 public class DoorController : MonoBehaviour
 {
-    private Animator animator;
+    [SerializeField] private Animator animator;
 
     void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>(true);
 
-        Debug.Log("AWAKE -> " + gameObject.name);
-
-        if (animator != null)
-            Debug.Log("Animator encontrado em: " + animator.gameObject.name);
-        else
-            Debug.LogError("Animator não encontrado!");
+        if (animator == null)
+            Debug.LogError("Animator é NULL em: " + gameObject.name);
     }
 
     public void OpenDoor()
     {
-        Debug.Log("OPEN DOOR -> " + gameObject.name);
-
         if (animator == null)
         {
             Debug.LogError("Animator é NULL!");

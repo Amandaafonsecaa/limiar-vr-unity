@@ -587,8 +587,8 @@ GameObject:
   - component: {fileID: 277456937}
   - component: {fileID: 277456940}
   - component: {fileID: 277456939}
-  - component: {fileID: 277456938}
   - component: {fileID: 277456941}
+  - component: {fileID: 277456942}
   m_Layer: 5
   m_Name: PlayerBall
   m_TagString: Player
@@ -615,25 +615,6 @@ RectTransform:
   m_AnchoredPosition: {x: -176, y: 94}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &277456938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 277456936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b30a4744901243708aa24dabb9de28b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PuzzleBallVR
-  speed: 200
-  finishArea: {fileID: 1238630957}
-  whisperAudio: {fileID: 0}
-  monitor: {fileID: 940433713}
-  door1: {fileID: 1169353167}
-  doorController: {fileID: 675833545}
-  afterPuzzleTrigger: {fileID: 1415475675}
 --- !u!114 &277456939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -708,6 +689,25 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &277456942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277456936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2f1a323d48bd420884f1293e2a79e83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PuzzleBallDragVR
+  mazeArea: {fileID: 287588021}
+  finishArea: {fileID: 1238630957}
+  monitor: {fileID: 955398414}
+  whisperAudio: {fileID: 921316757}
+  door1: {fileID: 1169353167}
+  doorController: {fileID: 675833545}
+  afterPuzzleTrigger: {fileID: 1415475677}
 --- !u!1 &287588020
 GameObject:
   m_ObjectHideFlags: 0
@@ -1053,6 +1053,12 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1371647732391088, guid: 0456882ebacfb074f93134e3ae2b40ad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1169353170}
+    - targetCorrespondingSourceObject: {fileID: 1371647732391088, guid: 0456882ebacfb074f93134e3ae2b40ad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1169353169}
     - targetCorrespondingSourceObject: {fileID: 1358950855282810, guid: 0456882ebacfb074f93134e3ae2b40ad, type: 3}
       insertIndex: 3
       addedObject: {fileID: 675833545}
@@ -1522,6 +1528,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 860372266d985fd48a39ae29938ff689, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorController
+  animator: {fileID: 0}
 --- !u!95 &675833546
 Animator:
   serializedVersion: 7
@@ -1578,7 +1585,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -681, y: -238}
+  m_AnchoredPosition: {x: -662, y: -238}
   m_SizeDelta: {x: 18.7, y: 10.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &695589738
@@ -1810,14 +1817,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 736829216}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96784ab1bdeb041a2a76023d4d3dbbe5, type: 3}
+  m_Script: {fileID: 11500000, guid: 559e07c12bea54647bc4ea3a41a9af17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LegendaVR
   captionCanvasGroup: {fileID: 533996086}
   captionText: {fileID: 1625164660}
-  cameraJogador: {fileID: 0}
+  cameraJogador: {fileID: 1127004442}
   distanciaDoRosto: 2
-  alturaLegenda: -0.6
+  alturaLegenda: -0.3
   fadeDuration: 0.25
   delayEntreLinhas: 0.2
 --- !u!4 &736829218
@@ -2040,6 +2047,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 757460947}
   m_CullTransparentMesh: 1
+--- !u!1 &762974748
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 762974750}
+  - component: {fileID: 762974749}
+  m_Layer: 0
+  m_Name: HubProgressManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &762974749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762974748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ddfc634cb494f62ab9f70f17422182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HubProgressManager
+  door2: {fileID: 1530599292}
+  door2SubtitleTrigger: {fileID: 1540614342}
+--- !u!4 &762974750
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762974748}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.96593, y: 1.57973, z: 11.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &801214581
 GameObject:
   m_ObjectHideFlags: 0
@@ -3349,6 +3402,40 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1371647732391088, guid: 0456882ebacfb074f93134e3ae2b40ad, type: 3}
   m_PrefabInstance: {fileID: 351768634}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1169353169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169353167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c5516a699ea14189af21603c5f3f9fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorSceneLoader
+  sceneName: Casa
+--- !u!65 &1169353170
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169353167}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2.0839953, z: 0.10025593}
+  m_Center: {x: 1.2765395e-17, y: 1.0721164, z: 0.015906446}
 --- !u!1 &1220798869
 GameObject:
   m_ObjectHideFlags: 0
@@ -3789,6 +3876,7 @@ GameObject:
   - component: {fileID: 1372086153}
   - component: {fileID: 1372086152}
   - component: {fileID: 1372086154}
+  - component: {fileID: 1372086155}
   m_Layer: 5
   m_Name: PuzzlePanel
   m_TagString: Untagged
@@ -3866,6 +3954,25 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &1372086155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372086150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.UI.TrackedDeviceGraphicRaycaster
+  m_IgnoreReversedGraphics: 0
+  m_CheckFor2DOcclusion: 0
+  m_CheckFor3DOcclusion: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RaycastTriggerInteraction: 1
 --- !u!1 &1376945927
 GameObject:
   m_ObjectHideFlags: 0
@@ -3950,7 +4057,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1415475676}
-  - component: {fileID: 1415475675}
+  - component: {fileID: 1415475677}
   m_Layer: 0
   m_Name: AfterPuzzleTrigger
   m_TagString: Untagged
@@ -3958,43 +4065,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1415475675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1415475674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 342e7fb830a2e4cd1919c30adaf4f2b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SubtitleTrigger
-  legendaVR: {fileID: 736829217}
-  falas:
-  - texto: 'Eu tava esperando a cara da Maria San-
-
-'
-    duracao: 3
-  - texto: '...
-
-'
-    duracao: 1
-  - texto: 'Eu preciso sair daqui.
-
-'
-    duracao: 3
-  - texto: 'AGORA.
-
-'
-    duracao: 2
-  - texto: 'O que tem nessa porta?
-
-'
-    duracao: 3
-  tocarAoIniciar: 0
-  tocarUmaVez: 1
-  musicaDepois: {fileID: 0}
 --- !u!4 &1415475676
 Transform:
   m_ObjectHideFlags: 0
@@ -4010,6 +4080,39 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1415475677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415475674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f2019c1edcbb49589c485fecc634d7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubtitleTrigger
+  sistemaLegenda: {fileID: 736829217}
+  dispararApenasUmaVez: 1
+  tocarAoIniciar: 0
+  musicaDepois: {fileID: 0}
+  linhas:
+  - texto: 'Eu tava esperando a cara da Maria San-
+
+'
+    duracao: 3
+  - texto: '...
+
+'
+    duracao: 2
+  - texto: 'Eu preciso sair daqui.
+
+'
+    duracao: 4
+  - texto: AGORA.
+    duracao: 2
+  - texto: O que tem nessa porta?
+    duracao: 4
 --- !u!1001 &1426652845
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4181,6 +4284,104 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db3e5aca7f72adb40a12ecd3ce5c17f3, type: 3}
+--- !u!1 &1530599292 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a16d3fed6db75ef48869af1007d3d67c, type: 3}
+  m_PrefabInstance: {fileID: 1740644573}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1530599293
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530599292}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0955756, y: 3.8909307, z: 0.16178969}
+  m_Center: {x: 0.038272534, y: 1.4454746, z: 0.022758944}
+--- !u!114 &1530599294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530599292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c5516a699ea14189af21603c5f3f9fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorSceneLoader
+  sceneName: Hospital
+--- !u!1 &1540614341
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1540614343}
+  - component: {fileID: 1540614342}
+  m_Layer: 0
+  m_Name: Door2SubtitleTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1540614342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540614341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f2019c1edcbb49589c485fecc634d7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubtitleTrigger
+  sistemaLegenda: {fileID: 736829217}
+  dispararApenasUmaVez: 0
+  tocarAoIniciar: 0
+  musicaDepois: {fileID: 0}
+  linhas:
+  - texto: 'Essa porta...
+
+'
+    duracao: 3
+  - texto: "Ela tamb\xE9m n\xE3o deveria estar aqui.\n"
+    duracao: 3
+  - texto: "Mas eu n\xE3o tenho outra escolha.\n"
+    duracao: 4
+  - texto: Preciso continuar.
+    duracao: 3
+--- !u!4 &1540614343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540614341}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.35013, y: 0, z: -8.95113}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1586993228
 GameObject:
   m_ObjectHideFlags: 0
@@ -4539,6 +4740,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 202364688, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 202364688, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.214
+      objectReference: {fileID: 0}
+    - target: {fileID: 202364688, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071068
       objectReference: {fileID: 0}
@@ -4557,6 +4766,14 @@ PrefabInstance:
     - target: {fileID: 202364688, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1670256625, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1670256625, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.012
       objectReference: {fileID: 0}
     - target: {fileID: 1670256625, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4860,7 +5077,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a16d3fed6db75ef48869af1007d3d67c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5162820104835090806, guid: a16d3fed6db75ef48869af1007d3d67c, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -4918,6 +5135,12 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a16d3fed6db75ef48869af1007d3d67c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1530599294}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a16d3fed6db75ef48869af1007d3d67c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1530599293}
     - targetCorrespondingSourceObject: {fileID: 5162820104835090806, guid: a16d3fed6db75ef48869af1007d3d67c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1740644582}
@@ -4967,6 +5190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 860372266d985fd48a39ae29938ff689, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorController
+  animator: {fileID: 0}
 --- !u!65 &1740644584
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5478,7 +5702,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1853478766}
-  - component: {fileID: 1853478765}
+  - component: {fileID: 1853478767}
   m_Layer: 0
   m_Name: IntroHubTrigger
   m_TagString: Untagged
@@ -5486,33 +5710,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1853478765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1853478764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 342e7fb830a2e4cd1919c30adaf4f2b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SubtitleTrigger
-  legendaVR: {fileID: 736829217}
-  falas:
-  - texto: AI, MEU JESUS...
-    duracao: 2
-  - texto: "Que lugar \xE9 esse?\n"
-    duracao: 3
-  - texto: 'Como eu saio daqui?
-
-'
-    duracao: 3
-  - texto: "Eu devia ir na dire\xE7\xE3o do PC...\nTalvez ache alguma informa\xE7\xE3o."
-    duracao: 4
-  tocarAoIniciar: 1
-  tocarUmaVez: 1
-  musicaDepois: {fileID: 748978960}
 --- !u!4 &1853478766
 Transform:
   m_ObjectHideFlags: 0
@@ -5528,6 +5725,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1853478767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853478764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f2019c1edcbb49589c485fecc634d7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubtitleTrigger
+  sistemaLegenda: {fileID: 736829217}
+  dispararApenasUmaVez: 1
+  tocarAoIniciar: 1
+  musicaDepois: {fileID: 748978960}
+  linhas:
+  - texto: AI, MEU JESUS...
+    duracao: 2
+  - texto: QUE?!
+    duracao: 2
+  - texto: "Onde diabos \xE9 isso?"
+    duracao: 3
+  - texto: Como eu saio daqui?
+    duracao: 3
+  - texto: "Eu devia ir na dire\xE7\xE3o do PC para ver se acho alguma informa\xE7\xE3o."
+    duracao: 4
 --- !u!1 &1854388837
 GameObject:
   m_ObjectHideFlags: 0
@@ -6443,3 +6667,5 @@ SceneRoots:
   - {fileID: 736829218}
   - {fileID: 1853478766}
   - {fileID: 1415475676}
+  - {fileID: 1540614343}
+  - {fileID: 762974750}
