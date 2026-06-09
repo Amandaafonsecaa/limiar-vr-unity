@@ -1,13 +1,13 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
-public class PuzzleBallVR : MonoBehaviour
+public class PuzzleBallDragVR : MonoBehaviour, IDragHandler
 {
-    public float speed = 300f;
+    public RectTransform mazeArea;
     public RectTransform finishArea;
 
-    public AudioSource whisperAudio;
     public BloodyMaryMonitor monitor;
+    public AudioSource whisperAudio;
     public GameObject door1;
     public DoorController doorController;
     public SubtitleTrigger afterPuzzleTrigger;
@@ -18,35 +18,41 @@ public class PuzzleBallVR : MonoBehaviour
     void Start()
     {
         rectTransform = GetComponent<RectTransform>();
-
-        monitor = FindFirstObjectByType<BloodyMaryMonitor>();
-
-        GameObject audioObj = GameObject.Find("WhisperAudio");
-
-        if (audioObj != null)
-            whisperAudio = audioObj.GetComponent<AudioSource>();
     }
 
-    void Update()
+    public void OnDrag(PointerEventData eventData)
     {
-        Vector2 movement = Vector2.zero;
-
-        if (Keyboard.current.wKey.isPressed)
-            movement += Vector2.up;
-
-        if (Keyboard.current.sKey.isPressed)
-            movement += Vector2.down;
-
-        if (Keyboard.current.aKey.isPressed)
-            movement += Vector2.left;
-
-        if (Keyboard.current.dKey.isPressed)
-            movement += Vector2.right;
-
-        rectTransform.anchoredPosition += movement * speed * Time.deltaTime;
-
         if (completed) return;
 
+        rectTransform.anchoredPosition += eventData.delta;
+
+        LimitarDentroDoMapa();
+        VerificarFinal();
+    }
+
+    void LimitarDentroDoMapa()
+    {
+        if (mazeArea == null) return;
+
+        Vector2 pos = rectTransform.anchoredPosition;
+
+        Rect mazeRect = mazeArea.rect;
+        Rect ballRect = rectTransform.rect;
+
+        float minX = mazeRect.xMin + ballRect.width / 2f;
+        float maxX = mazeRect.xMax - ballRect.width / 2f;
+
+        float minY = mazeRect.yMin + ballRect.height / 2f;
+        float maxY = mazeRect.yMax - ballRect.height / 2f;
+
+        pos.x = Mathf.Clamp(pos.x, minX, maxX);
+        pos.y = Mathf.Clamp(pos.y, minY, maxY);
+
+        rectTransform.anchoredPosition = pos;
+    }
+
+    void VerificarFinal()
+    {
         float distance = Vector2.Distance(
             rectTransform.anchoredPosition,
             finishArea.anchoredPosition
