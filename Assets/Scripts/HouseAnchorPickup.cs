@@ -21,6 +21,9 @@ public class HouseAnchorPickup : MonoBehaviour
     [Header("Progression")]
     [SerializeField] private MotherRoomProgressionManager progressionManager;
 
+    [Header("Sleep Paralysis Effect")]
+    [SerializeField] private SleepParalysisEffect sleepParalysisEffect;
+
     [Header("Visual")]
     [SerializeField] private GameObject visualRoot;
     [SerializeField] private Light anchorLight;
@@ -104,7 +107,9 @@ public class HouseAnchorPickup : MonoBehaviour
     private IEnumerator PlayLockedSequence()
     {
         captionPlaying = true;
+
         yield return PlayCaptions(lockedCaptionLines);
+
         captionPlaying = false;
     }
 
@@ -122,6 +127,9 @@ public class HouseAnchorPickup : MonoBehaviour
         if (visualRoot != null)
             visualRoot.SetActive(false);
 
+        if (sleepParalysisEffect != null)
+            sleepParalysisEffect.StopEffect();
+
         Debug.Log("Fim da fase da casa. Iniciando fade para preto.");
 
         yield return FadeToBlack();
@@ -136,10 +144,15 @@ public class HouseAnchorPickup : MonoBehaviour
         {
             Debug.Log("Hub ainda não carregado. Fase da casa concluída por enquanto.");
         }
+
+        captionPlaying = false;
     }
 
     private IEnumerator PlayCaptions(CaptionLine[] lines)
     {
+        if (lines == null || lines.Length == 0)
+            yield break;
+
         if (captionCanvas != null)
             captionCanvas.SetActive(true);
 
@@ -191,6 +204,8 @@ public class HouseAnchorPickup : MonoBehaviour
         fadeCanvasGroup.gameObject.SetActive(true);
         fadeCanvasGroup.alpha = 0f;
 
+        Debug.Log("Fade começou.");
+
         float elapsed = 0f;
 
         while (elapsed < fadeToBlackDuration)
@@ -201,5 +216,7 @@ public class HouseAnchorPickup : MonoBehaviour
         }
 
         fadeCanvasGroup.alpha = 1f;
+
+        Debug.Log("Fade terminou. Tela deveria estar preta.");
     }
 }
