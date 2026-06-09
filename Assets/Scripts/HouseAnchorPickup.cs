@@ -44,7 +44,7 @@ public class HouseAnchorPickup : MonoBehaviour
     [SerializeField] private float fadeToBlackDuration = 1.5f;
     [SerializeField] private float delayBeforeSceneLoad = 0.8f;
     [SerializeField] private bool loadHubAfterCollect = false;
-    [SerializeField] private string hubSceneName = "Hub";
+    [SerializeField] private string hubSceneName = "HubBranco";
 
     [Header("Timing")]
     [SerializeField] private float fadeDuration = 0.25f;

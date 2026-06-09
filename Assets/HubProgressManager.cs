@@ -7,8 +7,6 @@ public class HubProgressManager : MonoBehaviour
 
     void Start()
 {
-    GameProgress.casaConcluida = true;
-
     if (GameProgress.casaConcluida)
     {
         door2.SetActive(true);
