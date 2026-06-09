@@ -6,8 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Cutscene.unity
+    guid: a098cf0bfce8d453ca638fb2f2439972
+  - enabled: 1
+    path: Assets/Scenes/HubBranco.unity
+    guid: f0de5eea9314548e18436616f18fed74
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: e63bcc985078845cf90a6ee474320703, type: 2}
