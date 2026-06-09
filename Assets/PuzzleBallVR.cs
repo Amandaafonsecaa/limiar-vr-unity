@@ -9,26 +9,23 @@ public class PuzzleBallVR : MonoBehaviour
     public AudioSource whisperAudio;
     public BloodyMaryMonitor monitor;
     public GameObject door1;
+    public DoorController doorController;
+    public SubtitleTrigger afterPuzzleTrigger;
+
     private RectTransform rectTransform;
     private bool completed = false;
-    public DoorController doorController;
-void Start()
-{
-    rectTransform = GetComponent<RectTransform>();
 
-    monitor = FindFirstObjectByType<BloodyMaryMonitor>();
-
-    GameObject audioObj = GameObject.Find("WhisperAudio");
-
-    Debug.Log("Audio encontrado: " + audioObj);
-
-    if (audioObj != null)
+    void Start()
     {
-        whisperAudio = audioObj.GetComponent<AudioSource>();
+        rectTransform = GetComponent<RectTransform>();
 
-        Debug.Log("AudioSource encontrada: " + whisperAudio);
+        monitor = FindFirstObjectByType<BloodyMaryMonitor>();
+
+        GameObject audioObj = GameObject.Find("WhisperAudio");
+
+        if (audioObj != null)
+            whisperAudio = audioObj.GetComponent<AudioSource>();
     }
-}
 
     void Update()
     {
@@ -48,37 +45,35 @@ void Start()
 
         rectTransform.anchoredPosition += movement * speed * Time.deltaTime;
 
-        if (!completed)
+        if (completed) return;
+
+        float distance = Vector2.Distance(
+            rectTransform.anchoredPosition,
+            finishArea.anchoredPosition
+        );
+
+        if (distance < 30f)
         {
-            float distance = Vector2.Distance(
-                rectTransform.anchoredPosition,
-                finishArea.anchoredPosition
-            );
+            completed = true;
 
-            if (distance < 30f)
-            {
-                completed = true;
+            Debug.Log("Puzzle Concluído!");
 
-                Debug.Log("Puzzle Concluído!");
-
-                // Fecha o puzzle
-                transform.parent.gameObject.SetActive(false);
-
-                // Volta para o terminal
+            if (monitor != null)
                 monitor.ShowPuzzleCompleted();
 
-                // Toca o sussurro
-                if (whisperAudio != null)
-                    whisperAudio.Play();
+            if (whisperAudio != null)
+                whisperAudio.Play();
 
-                // Faz a Porta 1 aparecer
-                if (door1 != null)
-                    door1.SetActive(true);
+            if (afterPuzzleTrigger != null)
+                afterPuzzleTrigger.Invoke("TocarLegenda", 2.5f);
 
-                // Abre a porta
-                if (doorController != null)
-                    doorController.OpenDoor();
-            }
+            if (door1 != null)
+                door1.SetActive(true);
+
+            if (doorController != null)
+                doorController.OpenDoor();
+
+            transform.parent.gameObject.SetActive(false);
         }
     }
 }
