@@ -34,17 +34,15 @@ public class LegendaVR : MonoBehaviour
     {
         if (cameraJogador == null) return;
 
-        // Posição: Mantém um deslize suave e rápido (30f) para evitar enjoo de movimento (Motion Sickness)
         Vector3 posicaoAlvo = cameraJogador.position
                             + cameraJogador.forward * distanciaDoRosto
                             + Vector3.up * alturaLegenda;
 
-        transform.position = Vector3.Lerp(transform.position, posicaoAlvo, Time.deltaTime * 30f);
-
-        // Rotação: 100% travada com os olhos do jogador de forma instantânea
-        transform.rotation = cameraJogador.rotation;
+        transform.position = Vector3.Lerp(transform.position, posicaoAlvo, Time.deltaTime * 10f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, cameraJogador.rotation, Time.deltaTime * 10f);
     }
 
+    // Agora este método RECEBE as linhas que devem ser mostradas!
     public void MostrarSequencia(SubtitleTrigger.LinhaLegenda[] novasLinhas)
     {
         if (sequenciaAtiva != null) StopCoroutine(sequenciaAtiva);
