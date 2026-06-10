@@ -13,7 +13,7 @@ public class InterruptorMorgueRoom : MonoBehaviour
 
     [Header("Cena da Cutscene Final")]
     [SerializeField] private bool carregarCutsceneDepois = true;
-    [SerializeField] private string nomeCenaCutscene = "CutsceneFinal";
+    [SerializeField] private string nomeCenaCutscene = "Cutscene final";
     [SerializeField] private float tempoAntesDaCutscene = 6f;
 
     private bool jaAtivou = false;
