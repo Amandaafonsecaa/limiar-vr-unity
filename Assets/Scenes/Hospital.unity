@@ -1797,11 +1797,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 197153d8d56c245d7924c3fae649de68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LuzPiscando
-  minTempo: 0.01
-  maxTempo: 0.3
-  rendererLampada: {fileID: 104011019}
-  materialLigado: {fileID: 2100000, guid: 259e13bcf1f234fdfbcc44ad8b6afa4f, type: 2}
-  materialDesligado: {fileID: 2100000, guid: 65b0b243ca379403cb8bb38899baebe4, type: 2}
+  minTempo: 0.05
+  maxTempo: 0.4
+  rendererLampada: {fileID: 0}
+  materialLigado: {fileID: 0}
+  materialDesligado: {fileID: 0}
 --- !u!1 &170020772
 GameObject:
   m_ObjectHideFlags: 0
@@ -9129,10 +9129,9 @@ MonoBehaviour:
   luzDoQuarto: {fileID: 818059722}
   monstroPerseguidor: {fileID: 224207550}
   somDoMonstro: {fileID: 224207557}
-  tocarCutsceneDepois: 1
-  cutsceneObject: {fileID: 0}
-  cutsceneVideoPlayer: {fileID: 0}
-  tempoAntesDaCutscene: 8
+  carregarCutsceneDepois: 1
+  nomeCenaCutscene: Cutscene final
+  tempoAntesDaCutscene: 2
 --- !u!65 &725511342
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -28243,8 +28242,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae7aa3755cfcd4ad7a28684ff22efe65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReadablePaper
-  interactable: {fileID: 2017340963}
-  documentCanvas: {fileID: 571523265}
+  interactable: {fileID: 0}
+  documentCanvas: {fileID: 0}
   progressionManager: {fileID: 0}
   captionCanvas: {fileID: 0}
   captionCanvasGroup: {fileID: 0}
