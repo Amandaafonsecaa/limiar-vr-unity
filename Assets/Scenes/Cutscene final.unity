@@ -230,13 +230,8 @@ Transform:
   m_LocalScale: {x: 4, y: 2.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 514073462}
+  m_Father: {fileID: 1876685573}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &514073462 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1680501587, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
-  m_PrefabInstance: {fileID: 1876685570}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1846848633
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,7 +361,7 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 6038107472648090404, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 1680501587, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 1767192434, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2843704}
     m_AddedComponents:
@@ -423,6 +418,11 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!4 &1876685573 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1767192434, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 1876685570}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &1876685576 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1767192439, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}

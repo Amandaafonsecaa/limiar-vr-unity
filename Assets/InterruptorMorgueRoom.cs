@@ -72,7 +72,7 @@ public class InterruptorMorgueRoom : MonoBehaviour
         yield return new WaitForSeconds(tempoAntesDaCutscene);
 
         Debug.Log("[Morgue] Carregando cena da cutscene final.");
-
         SceneManager.LoadScene(nomeCenaCutscene);
+        Debug.Log("Cena carregada: " + nomeCenaCutscene);
     }
 }
