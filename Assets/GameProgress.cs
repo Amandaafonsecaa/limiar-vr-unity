@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameProgress
+public static class GameProgress
 {
         public static bool casaConcluida = false;
 }

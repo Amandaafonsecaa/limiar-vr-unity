@@ -124,8 +124,8 @@ public class HouseAnchorPickup : MonoBehaviour
         if (anchorLight != null)
             anchorLight.enabled = false;
 
-        if (visualRoot != null)
-            visualRoot.SetActive(false);
+        //if (visualRoot != null)
+            //visualRoot.SetActive(false);
 
         if (sleepParalysisEffect != null)
             sleepParalysisEffect.StopEffect();
@@ -138,6 +138,7 @@ public class HouseAnchorPickup : MonoBehaviour
 
         if (loadHubAfterCollect)
         {
+            GameProgress.casaConcluida = true;
             SceneManager.LoadScene(hubSceneName);
         }
         else
