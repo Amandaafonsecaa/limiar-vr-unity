@@ -385,8 +385,8 @@ MonoBehaviour:
   m_text: "LIMIAR VR\n\nDesenvolvido por\n\nAmanda Fonseca\nLuma Brand\xE3o\nKaylany
     Vit\xF3ria\nMaria Bianca\n\nObrigado por jogar.\n\nFIM"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 672147f69d879463694388779358883f, type: 2}
+  m_sharedMaterial: {fileID: -9084403638854784379, guid: 672147f69d879463694388779358883f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

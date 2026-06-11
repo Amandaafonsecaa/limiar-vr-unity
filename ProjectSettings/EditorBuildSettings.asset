@@ -23,8 +23,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cutscene final.unity
     guid: eb5eb6793e7f5469cad4dc5d7bb4ea9e
+  - enabled: 1
+    path: Assets/Scenes/Creditos.unity
+    guid: 6f18e6f42029440f89d0213b74f89185
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: e63bcc985078845cf90a6ee474320703, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: f3d519a15cb6a4a57a70a7b27876e6c3, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 2408630b32b6a49b08c0596ce98daf13, type: 2}
   m_UseUCBPForAssetBundles: 0
